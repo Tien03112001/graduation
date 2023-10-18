@@ -41,6 +41,10 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/banner-group/banner-group.module#BannerGroupModule'
   },
   {
+    path: 'cache',
+    loadChildren: 'app/modules/cache/cache.module#CacheModule'
+  },
+  {
     path: 'menus',
     loadChildren: 'app/modules/menu-position/menu-position.module#MenuPositionModule'
   },

@@ -26,7 +26,10 @@ Route::get('/test', function(){
 Route::group(['middleware' => ['auth.owned_website']], function () {
 
     Route::get('dashboard', 'DashboardController@index');
-
+    Route::group(['prefix' => 'cache'], function () {
+        Route::get('', 'CacheController@index');
+        Route::post('clear_cache_page', 'CacheController@clear');
+    });
     Route::resource('users', 'UserController');
 
     Route::resource('articles', 'ArticleController');

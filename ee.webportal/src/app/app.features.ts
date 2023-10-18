@@ -160,6 +160,11 @@ export const APP_FEATURES = [
         link: '/settings',
       },
       {
+        name: 'Cache',
+        icon: 'fa fa-cogs',
+        link: '/cache',
+      },
+      {
         name: 'Cấu hình ngôn ngữ',
         icon: 'fa fa-language',
         link: '/languages'
