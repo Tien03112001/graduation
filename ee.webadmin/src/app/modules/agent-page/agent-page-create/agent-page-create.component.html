@@ -1,0 +1,32 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Tạo mới</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th style="width:6%;">#</th>
+            <th>Tên tư vấn viên</th>
+            <th style="width:20%;">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="odd" *ngFor="let r of agents;let i = index">
+            <td style="text-align: center;">{{i + 1}}</td>
+            <td>{{r.user_name}}</td>
+            <td style="text-align: center;"><button type="submit" class="btn btn-success btn-sm" (click)=" createAgent(r) "><i
+                  class="fa fa-plus">Thêm</i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

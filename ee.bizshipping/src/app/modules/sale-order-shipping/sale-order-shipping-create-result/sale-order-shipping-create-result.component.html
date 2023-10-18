@@ -1,0 +1,52 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Vận đơn mới</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12 margin-bottom">
+      <button class="btn btn-default margin-r-5" (click)="printShippingBill()" title="In phiếu giao hàng">
+        <i class="fa fa-file-powerpoint-o"></i> In phiếu giao
+      </button>
+      <!--<button class="btn btn-default pull-right" (click)="printExportingBill()" title="In phiếu xuất kho">
+        <i class="fa fa-file-pdf-o"></i> In phiếu xuất
+      </button>-->
+    </div>
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th><input class="checkbox" type="checkbox" (change)="selectAll()" [checked]="statusSelectAll"></th>
+          <th>Sản phẩm</th>
+          <th>ID</th>
+          <th>ĐVVC</th>
+          <th>Mã VC</th>
+          <th>Đã in</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of list;let i=index">
+          <td><input class="checkbox" type="checkbox" (change)="selectItem(item,i)" [checked]="selectors[i]"></td>
+          <td><p *ngFor="let p of item['details']">{{p['product_code']}}</p></td>
+          <td>{{item.code}}</td>
+          <td>{{item.shipping?.unit?.name}}</td>
+          <td>
+            <span *ngIf="item.shipping.id">
+             {{item.shipping.code}}
+            </span>
+            <label class="label label-danger" *ngIf="!item.shipping.id">
+              {{item.shipping.note}}
+            </label>
+          </td>
+          <td>{{item.shipping.is_printed}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="dismiss()">Đóng</button>
+</div>

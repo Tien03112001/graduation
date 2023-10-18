@@ -1,0 +1,29 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Chỉnh sửa</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group">
+          <label for="url">
+            Đường dẫn
+          </label>
+          <input id="url" name="url" formControlName="url" class="form-control"
+                 placeholder="Hỗ trợ đường dẫn youtube" type="text">
+        </div>
+        <div class="form-group">
+          <iframe [src]="formGroup.controls['url'].value">
+          </iframe>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="!formGroup.valid" (click)="edit()">Chỉnh sửa</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

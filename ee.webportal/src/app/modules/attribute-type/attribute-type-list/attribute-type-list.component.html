@@ -1,0 +1,52 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Thuộc tính thông dụng - {{category}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-content">
+  <div class="col-lg-12">
+    <button type="button" title="Tạo mới từ khóa" class="btn btn-primary btn-sm pull-right" style="margin-right: 10px"
+            (click)="create()">
+      <i class="fa fa-plus"></i> Thêm mới
+    </button>
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Tên</th>
+        <th>Tùy chọn</th>
+        <th style="width: 100px;">Thao tác</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="list">
+      <tr class="odd" *ngFor="let item of list;let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{item.name}}</td>
+        <td>
+          <ul style="list-style-type: none;">
+            <li *ngFor="let ite of item.options; let j=index">{{j + 1}}: {{ite.text}}</li>
+          </ul>
+        </td>
+        <td>
+          <!--      <button class="btn btn-sm btn-default" (click)="repply(item)" title="Trả lời"><i-->
+          <!--        class="fa fa-comments-o"></i></button>-->
+          <button type="button" class="btn btn-default btn-sm" (click)="edit(item,i)">
+            <i class="fa fa-pencil-square-o"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover popoverTitle="Xóa"
+                  popoverMessage="Bạn thực sự muốn xóa?"
+                  placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                  cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+            <i class="fa fa-remove"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="dismiss()">Đóng</button>
+</div>

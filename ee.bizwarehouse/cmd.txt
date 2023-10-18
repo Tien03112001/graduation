@@ -1,0 +1,2 @@
+ng build --prod --env=prod --base-href=/inventory/
+ng build --prod --env=spexi --base-href=/inventory/

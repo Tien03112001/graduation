@@ -1,0 +1,62 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Tìm kiếm theo tên">
+          </div>
+          <div class="form-group col-xs-6">
+            <button class="btn btn-default" type="submit">
+              <i class="fa fa-search"></i> Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Tên</th>
+      <th>Meta</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index">
+      <td>{{i + 1}}</td>
+      <td>{{item.name}}</td>
+      <td>
+        <button *ngIf="!item.meta" type="button" class="btn btn-default btn-sm" (click)="createMeta(item,i)">
+          <i class="fa fa-google"></i> Tạo mới Meta
+        </button>
+        <button *ngIf="item.meta" type="button" class="btn btn-info btn-sm" (click)="editMeta(item,i)">
+          <i class="fa fa-google"></i> Chỉnh sửa Meta
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div  class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

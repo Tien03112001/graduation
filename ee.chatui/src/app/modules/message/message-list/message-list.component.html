@@ -1,0 +1,38 @@
+<div class="message-right">
+  <div class="message">
+    <div class="message-header">
+      <div class="message-header-image">
+        <img class="message-header-image-avatar" src="https://i.imgur.com/iDlpgWa.png"
+             alt="Avatar">
+      </div>
+      <div class="message-header-name">
+        <span>{{conversation.contact.full_name}}</span>
+      </div>
+      <div class="message-header-create-order">
+        <button>Tạo đơn</button>
+      </div>
+    </div>
+    <div class="message-content">
+      <div class="message-content-view">
+        <ul class="message-content-view-list">
+
+          <ng-container *ngFor="let item of list;let i=index">
+            <li class="message-content-view-item message-user" *ngIf="item.type == 0">
+              <span class="message-content-view-item-text">{{item.content}}</span>
+            </li>
+            <li class="message-content-view-item message-staff" *ngIf="item.type != 0">
+              <span class="message-content-view-item-text">{{item.content}}</span>
+              <span class="message-content-view-item-name-staff">Từ: {{item.sender_name}}</span>
+            </li>
+          </ng-container>
+
+        </ul>
+      </div>
+      <div class="message-content-form">
+        <textarea [(ngModel)]="content" class="message-content-form-input" type="text" placeholder="Nhập nội dung"
+                  name="content"></textarea>
+        <button class="message-content-form-button" (click)="sendMessage()" [disabled]="!content">Gửi</button>
+      </div>
+    </div>
+  </div>
+</div>

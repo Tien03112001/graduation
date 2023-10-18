@@ -1,0 +1,36 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Thay đổi vị trí menu</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group">
+          <label for="name">
+            Tên
+            <span [hidden]="formGroup.controls['name'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="name" name="name" class="form-control"
+                 placeholder="Nhập tên" type="text"
+                 formControlName="name" disabled>
+        </div>
+        <div class="form-group">
+          <label for="name">
+            Mô tả
+            <span [hidden]="formGroup.controls['description'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="description" name="name" class="form-control"
+                 placeholder="Nhập mô tả" type="text"
+                 formControlName="description">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="edit()">THay đổi</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

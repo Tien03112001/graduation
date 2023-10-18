@@ -1,0 +1,35 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left"><i class="fa fa-pencil-square-o"></i> Sửa ngôn ngữ</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group">
+          <label for="name">
+            Tên
+            <span [hidden]="formGroup.controls['name'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="name" name="name" class="form-control"
+                 placeholder="Nhập tên dich. Viết không dấu cách nhau bởi dấu cách" type="text"
+                 formControlName="name" disabled>
+        </div>
+        <div class="form-group">
+          <label for="value">
+            Dịch
+            <span [hidden]="formGroup.controls['value'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="value" name="value" class="form-control" type="text"
+                 formControlName="value" autofocus>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="edit()"><i class="fa fa-floppy-o"></i> Lưu lại</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()"><i class="fa fa-ban"></i> Hủy bỏ</button>
+</div>

@@ -1,0 +1,33 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Chỉnh sửa nội dung</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group">
+          <label for="title">
+            Tiêu đề
+            <span [hidden]="formGroup.controls['title'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="title" name="title" class="form-control" placeholder="Nhập tiêu đề" type="text"
+                 formControlName="title" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="content">
+            Nội dung
+            <span [hidden]="formGroup.controls['content'].valid" class="alert-text"> *</span>
+          </label>
+          <ckeditor id="content" formControlName="content" [config]="ckEditorConfig"></ckeditor>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="edit()">Thay đổi</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

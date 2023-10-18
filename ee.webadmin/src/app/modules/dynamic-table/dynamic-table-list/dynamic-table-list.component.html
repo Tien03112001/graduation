@@ -1,0 +1,151 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <label for="search">Tìm kiếm theo tên</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Tìm kiếm theo tên">
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Thông tin công ty</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let position of list; let i = index">
+      <td>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse{{i}}">{{position.name}}</a>
+              </h4>
+            </div>
+
+            <div id="collapse{{i}}" class="panel-collapse collapse">
+              <div class="panel-body">
+                <div class="row margin-bottom">
+                  <button type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right"
+                          style="margin-right: 10px" [disabled]="position.columns.length<=0"
+                          (click)="createRow(position,i)"><i class="fa fa-plus-square"></i> Thêm dữ liệu
+                  </button>
+                </div>
+                <table class="table table-bordered table-hover" id="table">
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th *ngFor="let column of position.columns; let j = index;">
+                      {{column.name}}
+                    </th>
+                    <th>Thao tác</th>
+                  </tr>
+                  </thead>
+                  <tr *ngFor="let row of position.rows; let j = index">
+                    <td style="width: 5%">{{j + 1}}</td>
+                    <td *ngFor="let column of position.columns"
+                        [ngStyle]="{'width': 85/position.columns.length+'%'}">
+                      <div *ngFor="let cell of position.cells">
+                        <div *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'text'">
+                          {{cell.cell_value}}
+                        </div>
+                        <div *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'number'">
+                          {{cell.cell_value}}
+                        </div>
+                        <div class="text-center" *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'image'">
+                          <img src="{{cell.cell_value}}" width="100" height="100">
+                        </div>
+                        <div *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'textarea'">
+                          <textarea class="form-control" disabled>{{cell.cell_value}}</textarea>
+                        </div>
+                        <div class="text-center" *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'file'">
+                          <img src="{{cell.cell_value}}" width="100" height="100">
+                        </div>
+                        <div *ngIf="cell.table_id == column.table_id && cell.column_id == column.id &&
+                        cell.row_id == row.id && column.type === 'html'">
+                          <div [innerHTML]="cell.cell_value"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="width: 10%">
+                      <button type="button" title="Sửa dữ liệu" class="btn btn-default btn-sm"
+                              (click)="editRow(position.columns, row, position.cells, i, j)"><i
+                        class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                      <button title="Xóa dữ liệu" type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                              popoverTitle="Xóa dữ liệu"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>"
+                              (confirm)="deleteRow(row, position.cells, i, j)">
+                        <i class="fa fa-remove" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+                <div class="panel-footer">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <pagination [totalItems]="pagination.totalItems" [(ngModel)]="position.rows.length"
+                                  [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                                  (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                                  (numPages)="pagination.numPages = $event"></pagination>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="box-go-to">
+                        <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+                        <span class="col-xs-1">/</span>
+                        <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+                        <div class="col-xs-4">
+                          <button (click)="goToPage()">Đến</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
+                class="label label-default">Ẩn</label></a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

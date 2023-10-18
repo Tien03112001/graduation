@@ -1,0 +1,114 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <label for="search">Tìm kiếm theo tên</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Nhập chuỗi kí tự">
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="create()"> <i class="fa fa-plus-square"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Quản lý form</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list; let i = index">
+      <td>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-6">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" (click)="loadFormAtribute(item)" href="#collapse{{i}}">{{item.name}}</a>
+                    </h4>
+                  </div>
+                </div>
+                <div class="col-xs-6 ">
+                  <div  style="float:right;">
+                  <button type="button" class="btn btn-default btn-sm" (click)="edit(item,i)">
+                    <i class="fa fa-pencil-square-o"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover popoverTitle="Xóa"
+                          popoverMessage="Bạn thực sự muốn xóa?"
+                          placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                          cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="collapse{{i}}" class="panel-collapse collapse">
+              <div class="panel-body">
+                <button type="button" title="Thêm cột" class="btn btn-primary pull-right"
+                        (click)="createAttribute(item,i)"><i class="fa fa-plus-square"></i> Thêm trường dữ liệu
+                </button>
+                <hr>
+                <table class="table table-bordered table-hover" id="table_{{i}}">
+                  <tr *ngFor="let att of listAtribute[item.id]; let i = index;">
+                    <td>
+                      {{att.name}}
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-default btn-sm" (click)="editAttribute(att,i)">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover popoverTitle="Xóa"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="removeAtribute(att,i,item.id)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
+                class="label label-default">Ẩn</label></a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

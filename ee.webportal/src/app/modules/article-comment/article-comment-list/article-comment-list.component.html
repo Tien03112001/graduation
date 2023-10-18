@@ -1,0 +1,57 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Bình luận</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-content">
+  <button type="button" title="Tạo mới từ khóa" class="btn btn-primary btn-sm pull-right" style="margin-right: 10px; margin-bottom: 5px; margin-top: 5px"
+          (click)="create()">
+    <i class="fa fa-plus"></i> Thêm mới
+  </button>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Khách hàng</th>
+      <th>Bình luận</th>
+      <th style="width: 100px;">Thời gian</th>
+      <th>Trạng thái</th>
+      <th style="width: 100px;">Thao tác</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="list">
+    <tr class="odd" *ngFor="let item of list;let i = index">
+      <td>{{i + 1}}</td>
+      <td>{{item.author}}</td>
+      <td>
+        <div [innerHTML]="item.content"></div>
+      </td>
+      <td>
+        {{item.created_at | date: 'dd-MM-yyyy'}}
+      </td>
+      <td>
+        <div class="pull-left" style="margin-right: 5px">
+          <ui-switch [checked]="item.published" (change)="onPublishedChange(item,i,$event)"></ui-switch>
+        </div>
+      </td>
+      <td>
+        <!--      <button class="btn btn-sm btn-default" (click)="repply(item)" title="Trả lời"><i-->
+        <!--        class="fa fa-comments-o"></i></button>-->
+        <button type="button" title="Chỉnh sửa" class="btn btn-default btn-sm" (click)="edit(item,i)">
+          <i class="fa fa-pencil-square-o"></i>
+        </button>
+        <button type="button" title="Xóa" class="btn btn-danger btn-sm" mwlConfirmationPopover popoverTitle="Xóa"
+                popoverMessage="Bạn thực sự muốn xóa?"
+                placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+          <i class="fa fa-remove"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="dismiss()">Đóng</button>
+</div>

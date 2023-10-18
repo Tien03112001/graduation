@@ -1,0 +1,158 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()" class="row" novalidate>
+          <div [ngClass]="f['class']" *ngFor="let f of searchControls">
+            <div class="form-group">
+              <ng-template [ngIf]="f.type=='input'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                       class="form-control"
+                       [placeholder]="f.placeHolder" [type]="f.typeof">
+              </ng-template>
+              <ng-template [ngIf]="f.type=='textarea'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                          class="form-control"
+                          [placeholder]="f.placeHolder" [rows]="f.config['rows']">
+                </textarea>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                        class="form-control">
+                  <option *ngFor="let option of f.data"
+                          [value]="option[f.config['primaryKey']]">{{option[f.config['labelKey']]}}</option>
+                </select>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select2'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
+                                      [data]="f.data" [settings]="f.config">
+                </angular2-multiselect>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-group">
+              <button class="btn btn-default margin-r-5" type="submit" [disabled]="!searchForm.valid"
+                      title="Tìm kiếm phiếu xuất kho">
+                <i class="fa fa-search"></i> Tìm kiếm
+              </button>
+              <button class="btn btn-default" type="button" (click)="removeFilter()" title="Xóa bộ lọc">
+                <i class="fa fa-remove"></i> Xóa lọc
+              </button>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <button type="button" class="btn btn-primary pull-right" (click)="create()" title="Thêm phiếu xuất kho mới">
+              <i class="fa fa-plus"></i> Thêm mới
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Tên</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd" *ngFor="let item of list;let i = index">
+        <td>{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+        <td>
+          <p>{{item.name}}</p>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>Mã sp</th>
+                <th>Size</th>
+                <th>SL</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let d of item.details;let j=index">
+                <td>{{j + 1}}</td>
+                <td>{{d.product_code}}</td>
+                <td>{{d.size}}</td>
+                <td>{{d.quantity}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </td>
+        <td>
+          <p>
+            <label class="label label-success" *ngIf="item.is_approved">Đã xong</label>
+            <label class="label label-warning" *ngIf="!item.is_approved">Chờ duyệt</label>
+          </p>
+          <div *ngIf="item.is_approved ==0">
+            <button class="btn btn-success btn-sm" (click)="approve(item,i)"
+                    title="Duyệt phiếu xuất kho">
+              <i class="fa fa-check-square-o"></i>
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="disapprove(item,i)"
+                    title="Không duyệt phiếu xuất kho">
+              <i class="fa fa-times-rectangle-o"></i>
+            </button>
+          </div>
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm margin-r-5 btn-default" title="In phiếu xuất kho"
+                  (click)="printBill(item)">
+            <i class="fa fa-print"></i>
+          </button>
+          <button type="button" class="btn btn-sm margin-r-5 btn-danger" title="Xóa phiếu xuất kho"
+                  (click)="remove(item,i)">
+            <i class="fa fa-remove"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-4">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-8">
+        <div class="box-go-to">
+          <div class="col-xs-2">
+            <input type="number" class="form-control" [(ngModel)]="nextPage" (change)="load()">
+          </div>
+          <div class="col-xs-2">
+            <p class="form-control-static">/ {{pagination.numPages}}</p>
+          </div>
+          <div class="col-xs-3">
+            <select class="form-control pull-right" [(ngModel)]="pagination.itemsPerPage" (change)="load()">
+              <option value="20">20 hàng</option>
+              <option value="50">50 hàng</option>
+              <option value="100">100 hàng</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

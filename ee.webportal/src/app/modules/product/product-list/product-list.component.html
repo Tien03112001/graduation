@@ -1,0 +1,149 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <label for="search">Tìm kiếm theo tiêu đề</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Nhập chuỗi kí tự">
+          </div>
+          <div class="form-group col-xs-6">
+            <label for="category">Tìm kiếm theo danh mục</label>
+            <ng-select id="category" #categorySelector labelForId="category" (change)="onCategoryChange($event)"
+                       [items]="categories|async" bindLabel="name" bindValue="id"
+                       placeholder="Chọn danh mục">
+            </ng-select>
+          </div>
+          <div class="form-group col-xs-6">
+            <label for="published">Tìm kiếm theo xuất bản</label>
+            <select id="published" name="published" class="form-control" formControlName="published">
+              <option value="">Tất cả</option>
+              <option [value]="1">Đã xuất bản</option>
+              <option [value]="0">Chưa xuất bản</option>
+            </select>
+          </div>
+          <div class="form-group col-xs-6">
+            <label for="tag">Tìm kiếm theo thẻ</label>
+            <ng-select id="tag" #tagSelector labelForId="tag" (change)="onTagChange($event)"
+                       [items]="tags|async" bindLabel="name" bindValue="id"
+                       placeholder="Chọn thẻ">
+            </ng-select>
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới sản phẩm" class="btn btn-primary btn-sm pull-right" (click)="createProduct()">
+          <i class="fa fa-plus"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Sản phẩm</th>
+      <th>Bài viết</th>
+      <th>Ảnh</th>
+      <th>Danh mục</th>
+      <th>Trạng thái</th>
+      <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index" (click)="RowSelected(item)">
+      <td>{{i + 1}}</td>
+      <td>
+        <p>
+          {{item.name}}
+        </p>
+        <p>{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
+        <a [href]="item.full_path" target="_blank" title="Xem sản phẩm">
+          <button type="button" class="btn btn-default btn-xs">
+            <i class="fa fa-external-link"></i>
+          </button>
+        </a>
+        <button title="Bình luận" class="btn btn-xs btn-default" (click)="manageComments(item)"><i
+          class="fa fa-comments-o"></i></button>
+        <button title="Tag" type="button" class="btn btn-default btn-xs" (click)="editTags(item,i)">
+          <i class="fa fa-tag"></i>
+        </button>
+        <button *ngIf="!item.gallery" title="thêm gallery" type="button" class="btn btn-default btn-xs" (click)="createGallery(item,i)">
+          <i class="fa fa-picture-o"></i>
+        </button>
+        <button *ngIf="item.gallery" title="danh sách ảnh" type="button" class="btn btn-default btn-xs" (click)="manageImages(item)">
+        <i class="fa fa-picture-o"></i>
+        </button>
+        <button title="Size" type="button" class="btn btn-default btn-xs" (click)="editSizes(item,i)">
+          <i class="fa fa-scribd"></i>
+        </button>
+
+
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-sm" (click)="createArticle(item,i)"
+                *ngIf="!item.article">
+          Thêm bài viết
+        </button>
+        <button type="button" class="btn btn-info btn-sm" (click)="editArticle(item,i)"
+                *ngIf="item.article">
+          Sửa bài viết
+        </button>
+      </td>
+      <td class="text-center">
+        <img width="100px" class="img-thumb" [src]=" item.image " *ngIf="item.image" [alt]="item.alt">
+      </td>
+      <td>
+        {{item.category ? item.category.name : 'Không xác định'}}
+      </td>
+      <td>
+        <div class="pull-left" style="margin-right: 5px">
+          <ui-switch *ngIf="item.published == 0" (change)="onPublishedChange(item,i,$event)"></ui-switch>
+          <ui-switch *ngIf="item.published == 1" [checked]="item.published" (change)="onPublishedChange(item,i,$event)"></ui-switch>
+        </div>
+      </td>
+      <td>
+        <div class="clearfix">
+          <button title="Sửa sản phẩm" type="button" class="btn btn-default btn-sm" (click)="editProduct(item,i)">
+            <i class="fa fa-pencil-square-o"></i>
+          </button>
+          <button title="Xóa sản phẩm" type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                  popoverTitle="Xóa"
+                  popoverMessage="Bạn thực sự muốn xóa?"
+                  placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                  cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+            <i class="fa fa-remove" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

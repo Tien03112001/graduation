@@ -1,0 +1,106 @@
+<div class="box box-default">
+  <div class="box-header">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()" class="row" novalidate>
+          <div [ngClass]="f['class']" *ngFor="let f of searchControls" [ngClass]="{
+              'has-error': !searchForm.controls[f.formControl].valid
+            }">
+            <div class="form-group">
+              <ng-template [ngIf]="f.type == 'input'">
+                <label [for]="f.formControl">
+                  {{ f.label }}
+                </label>
+                <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                  class="form-control" [placeholder]="f.placeHolder" [type]="f.typeof" />
+              </ng-template>
+              <ng-template [ngIf]="f.type == 'textarea'">
+                <label [for]="f.formControl">
+                  {{ f.label }}
+                </label>
+                <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                  class="form-control" [placeholder]="f.placeHolder" [rows]="f.config['rows']">
+                </textarea>
+              </ng-template>
+              <ng-template [ngIf]="f.type == 'select'">
+                <label [for]="f.formControl">
+                  {{ f.label }}
+                </label>
+                <select [id]="f.formControl" [formControlName]="f.formControl" class="form-control">
+                  <option *ngFor="let option of f.data" [value]="option[f.config['primaryKey']]">
+                    {{ option[f.config["labelKey"]] }}
+                  </option>
+                </select>
+              </ng-template>
+              <ng-template [ngIf]="f.type == 'select2'">
+                <label [for]="f.formControl">
+                  {{ f.label }}
+                </label>
+                <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl" [data]="f.data"
+                  [settings]="f.config">
+                </angular2-multiselect>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <button class="btn btn-default margin-r-5" type="submit" [disabled]="!searchForm.valid">
+                Tìm kiếm
+              </button>
+              <button class="btn btn-default" type="button" (click)="removeFilter()">
+                Xóa lọc
+              </button>
+            </div>
+          </div>
+          <div class="col-xs-12" style="display: flex;">
+            <button type="button" class="btn btn-default" (click)="import()">
+              <i class="fa fa-upload"></i> Nhập file excel
+            </button>
+            <button type="button" style="display: block;margin-left: auto;" class="btn btn-danger" mwlConfirmationPopover popoverTitle="Xóa"
+              popoverMessage="Bạn thực sự muốn xóa?" placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+              cancelText="No <i class='fa fa-remove'></i>" (confirm)="truncate()">
+              Xóa tất cả
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="box-body no-padding">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th style="text-align: center; width: 10%">ID</th>
+          <th style="text-align: center; width: 60%">Tên danh mục</th>
+          <th style="text-align: center; width: 30%">Trường bổ sung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd" *ngFor="let item of list; let i = index">
+          <td style="text-align: center">{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.additional_field }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+          [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)"
+          [boundaryLinks]="true" class="pagination-sm" (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage" />
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled />
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

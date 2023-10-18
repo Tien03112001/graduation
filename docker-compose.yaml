@@ -1,0 +1,127 @@
+version: '3.9'
+networks:
+  public_network:
+    external: true
+    name: dev_dev-network
+  ee_network:
+    driver: bridge
+services:
+  redis:
+    image: redis
+    command: redis-server --save 60 1 --loglevel warning --requirepass Hoangbao09
+    networks:
+      - ee_network
+  mongodb:
+    image: mongo
+    networks:
+      - ee_network
+    volumes:
+      - ./mongodb/mongod.conf:/etc/mongodb.conf
+      - ./mongodb/mongo-entrypoint/:/docker-entrypoint-initdb.d/
+      - ./mongodb/data:/data/db
+      - ./mongodb/logs:/var/log/mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+  mysql:
+    image: mysql
+    networks:
+      - ee_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/logs:/var/log/mysql/
+      - ./mysql/data:/var/lib/mysql/
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/dumps:/opt/mysql_dumps/
+  adminer:
+    image: dockette/adminer:dg
+    restart: always
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - ee_network
+      - public_network
+  rediscli:
+    image: redislabs/redisinsight
+    environment:
+      - RIPROXYENABLE=${RIPROXYENABLE}
+      - RITRUSTEDORIGINS=${RITRUSTEDORIGINS}
+    links:
+      - redis
+    depends_on:
+      - redis
+    networks:
+      - ee_network
+      - public_network
+  backend_php:
+    image: hoangbao1510/ee.backend.php:${VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile.backend_php
+    volumes:
+      - ./logs:/var/log/nginx
+      - ./docker/backend_php/supervisor.conf:/etc/supervisord.conf
+      - ./docker/backend_php/app.ini:/usr/local/etc/php/conf.d/app.ini
+      - ./docker/backend_php/nginx.conf:/etc/nginx/sites-enabled/default
+      - ./webcdn:/var/www/ee.webcdn/storage/app/public/
+    links:
+      - redis
+      - mysql
+      - mongodb
+    depends_on:
+      - redis
+      - mysql
+      - mongodb
+    networks:
+      - ee_network
+      - public_network
+  chatws:
+    image: hoangbao1510/ee.chatws:${VERSION}
+    build:
+      context: ./ee.chatws
+      dockerfile: Dockerfile
+    links:
+      - redis
+      - mysql
+      - mongodb
+    depends_on:
+      - redis
+      - mongodb
+      - mysql
+    networks:
+      - ee_network
+      - public_network
+  supervisor:
+    image: hoangbao1510/ee.supervisor:${VERSION}
+    build:
+      context: ./ee.supervisor
+      dockerfile: Dockerfile
+    links:
+      - redis
+      - mysql
+      - mongodb
+    depends_on:
+      - redis
+      - mongodb
+      - mysql
+    networks:
+      - ee_network
+  frontend:
+    image: hoangbao1510/ee.frontend:${VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    volumes:
+      - ./logs:/var/log/nginx
+      - ./docker/frontend/app.ini:/usr/local/etc/php/conf.d/app.ini
+      - ./docker/frontend/nginx.conf:/etc/nginx/sites-enabled/default
+    networks:
+      - ee_network
+      - public_network
+

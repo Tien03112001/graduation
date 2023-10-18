@@ -1,0 +1,39 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a href="javascript:void(0)">EziWeb - Quản trị web</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+
+    <form (ngSubmit)="login()" [formGroup]="formGroup" novalidate>
+      <div class="form-group has-feedback" [ngClass]="{'has-error':!formGroup.controls['username'].valid}">
+        <input name="username" type="text" class="form-control" placeholder="Tài khoản" formControlName="username">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback" [ngClass]="{'has-error':!formGroup.controls['password'].valid}">
+        <input type="password" name="password" class="form-control" placeholder="Mật khẩu" formControlName="password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> Ghi nhớ
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Đăng nhập</button>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-12 text-right">
+          <a href="#">Quên mật khẩu?</a><br>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- /.login-box-body -->
+</div>

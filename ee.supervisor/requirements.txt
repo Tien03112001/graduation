@@ -1,0 +1,7 @@
+requests
+regex
+psutil
+redis
+python-dotenv
+kafka-python
+pymongo

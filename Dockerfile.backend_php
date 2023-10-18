@@ -1,0 +1,56 @@
+FROM ezi/php7
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy nginx/php/supervisor configs
+COPY docker/backend_php/supervisor.conf /etc/supervisord.conf
+COPY docker/backend_php/app.ini /usr/local/etc/php/conf.d/app.ini
+COPY docker/backend_php/nginx.conf /etc/nginx/sites-enabled/default
+COPY docker/backend_php/run.sh /var/www/
+
+# Copy code webapp to /var/www
+RUN mkdir ee.webcdn
+RUN mkdir ee.webapp
+RUN mkdir ee.bizapp
+RUN mkdir ee.chatapp
+RUN mkdir ee.theme
+
+COPY --chown=www:www-data ./ee.webcdn /var/www/ee.webcdn/
+COPY --chown=www:www-data ./ee.webapp /var/www/ee.webapp/
+COPY --chown=www:www-data ./ee.bizapp /var/www/ee.bizapp/
+COPY --chown=www:www-data ./ee.chatapp /var/www/ee.chatapp/
+COPY --chown=www:www-data ./ee.theme /var/www/ee.theme/
+
+# Deployment steps
+WORKDIR /var/www/ee.webcdn
+RUN chmod -R ug+w storage/
+RUN chmod -R ug+w bootstrap/cache
+RUN composer install --optimize-autoloader --no-dev
+
+WORKDIR /var/www/ee.webapp
+RUN chmod -R ug+w storage/
+RUN chmod -R ug+w public/xml/
+RUN chmod -R ug+w bootstrap/cache
+RUN composer install --optimize-autoloader --no-dev
+
+WORKDIR /var/www/ee.bizapp
+RUN chmod -R ug+w storage/
+RUN chmod -R ug+w bootstrap/cache
+RUN composer install --optimize-autoloader --no-dev
+
+WORKDIR /var/www/ee.chatapp
+RUN chmod -R ug+w storage/
+RUN chmod -R ug+w bootstrap/cache
+RUN composer install --optimize-autoloader --no-dev
+
+WORKDIR /var/www/ee.theme
+RUN chmod -R ug+w storage/
+RUN chmod -R ug+w public/xml/
+RUN chmod -R ug+w bootstrap/cache
+RUN composer install --optimize-autoloader --no-dev
+
+RUN chmod +x /var/www/run.sh
+
+EXPOSE 8000-8010
+ENTRYPOINT ["sh", "/var/www/run.sh"]

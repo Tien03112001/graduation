@@ -1,0 +1,71 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Xác nhận đơn hàng</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="row">
+          <div class="col-xs-12">
+            <!-- Hình thức thanh toán -->
+            <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[0].formControl].valid}">
+              <label [for]="fields[0].formControl">
+                {{fields[0].label}}
+              </label>
+              <select [id]="fields[0].formControl" [name]="fields[0].formControl"
+                [formControlName]="fields[0].formControl" class="form-control">
+                <option *ngFor="let option of fields[0].data" [value]="option['value']">{{option['text']}}</option>
+              </select>
+            </div>
+            <!-- Phí CoD -->
+            <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[1].formControl].valid}">
+              <label [for]="fields[1].formControl">
+                {{fields[1].label}}
+              </label>
+              <input [id]="fields[1].formControl" [name]="fields[1].formControl"
+                [formControlName]="fields[1].formControl" class="form-control" [placeholder]="fields[1].placeHolder"
+                [type]="fields[1].typeof">
+            </div>
+            <!--Thông tin thanh toán-->
+            <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[2].formControl].valid}">
+              <label [for]="fields[2].formControl">
+                {{fields[2].label}}
+              </label>
+              <textarea [id]="fields[2].formControl" [name]="fields[2].formControl"
+                [formControlName]="fields[2].formControl" class="form-control" [placeholder]="fields[2].placeHolder"
+                [rows]="fields[2].config['rows']"  style="min-height: 114px; max-width: 530px;">
+                      </textarea>
+            </div>
+            <!-- Tải ảnh -->
+            <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[3].formControl].valid}">
+              <label [for]="fields[3].formControl">
+                {{fields[3].label}}
+              </label>
+              <input [id]="fields[3].formControl" [name]="fields[3].formControl" class="form-control"
+                [placeholder]="fields[3].placeHolder" type="file"
+                (change)="fields[3].config['onFileChange'](formGroup,fields[3].formControl,$event)"
+                accept="{{fields[3].config['accept']}}" style="min-height: 114px;">
+            </div>
+            <!--Ghi chú-->
+            <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[4].formControl].valid}">
+              <label [for]="fields[4].formControl">
+                {{fields[4].label}}
+              </label>
+              <textarea [id]="fields[4].formControl" [name]="fields[4].formControl"
+                [formControlName]="fields[4].formControl" class="form-control" [placeholder]="fields[4].placeHolder"
+                [rows]="fields[4].config['rows']" style="max-width: 1221px;">
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="!formGroup.valid" (click)="verify()">Xác nhận</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

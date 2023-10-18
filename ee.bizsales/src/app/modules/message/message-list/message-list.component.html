@@ -1,0 +1,198 @@
+<section class="chat-body chat-right-block">
+  <div class="chat-topbar">
+    <div class="chat-user-info">
+      <img class="avatar" src="assets/img/user.png"/>
+      <div class="chat-name">
+        <h6>{{ conversation.contact.full_name }}</h6>
+        <ng-template [ngIf]="!conversation.customer.rank" [ngIfElse]="rank">
+          <span class="customer-level">Khách hàng mới</span></ng-template>
+        <ng-template #rank>
+          <div *ngIf="conversation.customer.rank.name == 'Vàng'">
+            <span class="customer-level gold">{{
+              conversation.customer.rank.name
+              }}</span>
+          </div>
+          <div *ngIf="conversation.customer.rank.name == 'Bạc'">
+            <span class="customer-level silver">{{
+              conversation.customer.rank.name
+              }}</span>
+          </div>
+          <div *ngIf="conversation.customer.rank.name == 'Đồng'">
+            <span class="customer-level bronze">{{
+              conversation.customer.rank.name
+              }}</span>
+          </div>
+          <div *ngIf="conversation.customer.rank.name == 'Kim cương'">
+            <span class="customer-level diamond">{{
+              conversation.customer.rank.name
+              }}</span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="order-option">
+      <a class="btn btn-primary" href="javascript:;">Tạo đơn</a>
+      <a href="javascript:;"><img src="assets/img/option-doc.svg"/></a>
+    </div>
+  </div>
+
+  <div class="chat-content">
+    <div class="row" *ngIf="list.length > 0 && list.length % 20 == 0">
+      <div class="col-xs-12 text-center">
+        <button class="btn btn-default" (click)="loadHistoryMessages()">Load more</button>
+      </div>
+    </div>
+    <div class="chat-container">
+      <div style="display: flex; flex-direction: column-reverse">
+        <ng-container *ngFor="let item of list; let i = index">
+          <div class="mess" *ngIf="item.type == 0">
+            <div class="mess-block">
+              <div class="mess-content">
+                <span>{{ item.content }}</span>
+              </div>
+            </div>
+            <div class="mess-option">
+              <div class="mess-date">
+                {{ item.created_at | date : "medium" }}
+              </div>
+              <img src="assets/img/option-ngang.svg"/>
+            </div>
+          </div>
+          <div class="mess self" *ngIf="item.type != 0">
+            <div class="mess-block">
+              <div class="mess-content">
+                <span>{{ item.content }}</span>
+              </div>
+            </div>
+            <div class="mess-option">
+              <div class="mess-date">
+                {{ item.created_at | date : 'medium' }}
+              </div>
+              <div class="self-name">(Từ: {{ item.sender_name }})</div>
+              <img src="assets/img/option-ngang.svg"/>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+  <div class="chat-footer">
+    <form [formGroup]="searchForm" (ngSubmit)="sendMessage()"novalidate>
+      <span>
+        <img onclick="myOption()" class="send-option-btn" src="assets/img/plus.svg"/>
+        <div id="sendOption" class="send-option">
+          <a href="javascript:;">
+            <img src="assets/img/image.svg" />
+            <span>Bộ sưu tập</span>
+          </a>
+          <!-- <a href="javascript:;">
+                      <img src="assets/img/file-upload.svg">
+                      <span>Đính kèm tệp</span>
+                  </a>
+                  <a href="javascript:;">
+                      <img src="assets/img/cart.svg">
+                      <span>Sản phẩm</span>
+                  </a> -->
+        </div>
+      </span>
+      <!-- <input id="demo" type="text" name="content" placeholder="Nhập tin nhắn..."/> -->
+      <input id="demo" name="content" [(ngModel)]="content" [formControlName]="searchControls[0].formControl" class="form-control" placeholder="Nhập tin nhắn..." type="text">
+      <span>
+        <img id="smileBtn" onclick="myEmoji()" class="emoji-option-btn" src="assets/img/emoji.svg"/>
+        <div id="emojiOption" class="emoji-option">
+          <ul id="emojiList" class="emoji-list">
+            <h6>Biểu tượng cảm xúc - Emoji</h6>
+            <li>&#128512;</li>
+            <li>&#128513;</li>
+            <li>&#128514;</li>
+            <li>&#128515;</li>
+            <li>&#128516;</li>
+            <li>&#128517;</li>
+            <li>&#128518;</li>
+            <li>&#128519;</li>
+            <li>&#128520;</li>
+            <li>&#128521;</li>
+            <li>&#128522;</li>
+            <li>&#128523;</li>
+            <li>&#128524;</li>
+            <li>&#128525;</li>
+            <li>&#128526;</li>
+            <li>&#128527;</li>
+            <li>&#128528;</li>
+            <li>&#128529;</li>
+            <li>&#128530;</li>
+            <li>&#128531;</li>
+            <li>&#128532;</li>
+            <li>&#128533;</li>
+            <li>&#128534;</li>
+            <li>&#128535;</li>
+            <li>&#128536;</li>
+            <li>&#128537;</li>
+            <li>&#128538;</li>
+            <li>&#128539;</li>
+            <li>&#128540;</li>
+            <li>&#128541;</li>
+            <li>&#128542;</li>
+            <li>&#128543;</li>
+            <li>&#128544;</li>
+            <li>&#128545;</li>
+            <li>&#128546;</li>
+            <li>&#128547;</li>
+            <li>&#128548;</li>
+            <li>&#128549;</li>
+            <li>&#128550;</li>
+            <li>&#128551;</li>
+            <li>&#128552;</li>
+            <li>&#128553;</li>
+            <li>&#128554;</li>
+            <li>&#128555;</li>
+            <li>&#128556;</li>
+            <li>&#128557;</li>
+            <li>&#128558;</li>
+            <li>&#128559;</li>
+            <li>&#128560;</li>
+            <li>&#128561;</li>
+            <li>&#128562;</li>
+            <li>&#128563;</li>
+            <li>&#128564;</li>
+            <li>&#128565;</li>
+            <li>&#128566;</li>
+            <li>&#128567;</li>
+            <li>&#128577;</li>
+            <li>&#128578;</li>
+            <li>&#128579;</li>
+            <li>&#128580;</li>
+            <li>&#129296;</li>
+            <li>&#129297;</li>
+            <li>&#129298;</li>
+            <li>&#129299;</li>
+            <li>&#129300;</li>
+            <li>&#129301;</li>
+            <li>&#129312;</li>
+            <li>&#129313;</li>
+            <li>&#129314;</li>
+            <li>&#129315;</li>
+            <li>&#129316;</li>
+            <li>&#129317;</li>
+            <li>&#129318;</li>
+            <li>&#129319;</li>
+            <li>&#129320;</li>
+            <li>&#129321;</li>
+            <li>&#129322;</li>
+            <li>&#129323;</li>
+            <li>&#129324;</li>
+            <li>&#129325;</li>
+            <li>&#129326;</li>
+            <li>&#129327;</li>
+            <li>&#129488;</li>
+            <li>&#128568;</li>
+          </ul>
+        </div>
+      </span>
+      <button class="btn-send" type="submit" [disabled]="!searchForm.valid">
+        <img src="assets/img/send.svg"/>
+      </button>
+    </form>
+  </div>
+</section>

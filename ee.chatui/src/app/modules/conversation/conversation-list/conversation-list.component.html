@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+  <div class="row">
+    <div class="col-md-3 conversation-left">
+      <ul class="list-conversation">
+        <li class="list-conversation-item" *ngFor="let item of list; let i=index">
+          <a href="javascript:void(0)" class="list-conversation-item-link" (click)="clickDetailConversion(item,i)">
+            <div class="list-conversation-item-link-info">
+              <div class="list-conversation-item-link-info-image">
+                <img class="list-conversation-item-link-info-image-avatar"
+                     src="https://i.imgur.com/iDlpgWa.png" alt="Avatar">
+              </div>
+              <div class="list-conversation-item-link-info-name">
+                <span>{{item.contact.full_name}}</span>
+              </div>
+              <div class="list-conversation-item-link-info-created">
+                <span>{{item.updated_at| date: 'M-d'}}</span>
+              </div>
+            </div>
+            <div class="list-conversation-item-link-website">
+              <span>{{item.source.page.name}}</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- View -->
+    <div class="col-md-9 p-0" *ngIf="conversationSelected">
+      <app-message-list [conversation]="conversationSelected" [newMessage]="newMessage"></app-message-list>
+    </div>
+
+<!--    <div class="col-md-4 p-0">-->
+<!--      <app-order-list></app-order-list>-->
+<!--    </div>-->
+    <!-- View -->
+
+  </div>
+</div>

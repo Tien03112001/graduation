@@ -1,0 +1,33 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Chỉnh sửa</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group">
+          <label for="option">
+            Option
+            <span [hidden]="formGroup.controls['option'].valid" class="alert-text"> *</span>
+          </label>
+          <input id="option" name="option" formControlName="option" class="form-control" placeholder="Option" type="text" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="color_code">
+            Mã màu
+            <span [hidden]="formGroup.controls['color_code'].valid" class="alert-text">*</span>
+          </label>
+          <input id="color_code" name="color_code" formControlName="color_code" class="form-control" placeholder="Mã màu dùng cho thuộc tính màu sắc" type="text"
+                 autofocus>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="edit()">Thay đổi</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

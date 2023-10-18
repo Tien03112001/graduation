@@ -1,0 +1,165 @@
+<div class="box box-default">
+  <div class="box-header">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()" class="row" novalidate>
+          <div [ngClass]="f['class']" *ngFor="let f of searchControls"
+          [ngClass]="{'has-error':!searchForm.controls[f.formControl].valid}">
+            <div class="form-group">
+              <ng-template [ngIf]="f.type=='input'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                       class="form-control"
+                       [placeholder]="f.placeHolder" [type]="f.typeof">
+              </ng-template>
+              <ng-template [ngIf]="f.type=='textarea'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                          class="form-control"
+                          [placeholder]="f.placeHolder" [rows]="f.config['rows']">
+                </textarea>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                        class="form-control">
+                  <option *ngFor="let option of f.data"
+                          [value]="option[f.config['primaryKey']]">{{option[f.config['labelKey']]}}</option>
+                </select>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select2'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
+                                      [data]="f.data" [settings]="f.config">
+                </angular2-multiselect>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <button class="btn btn-default margin-r-5" type="submit">
+                <i class="fa fa-search"></i> Tìm kiếm
+              </button>
+              <button class="btn btn-default" type="button" (click)="removeFilter()">
+                <i class="fa fa-remove"></i> Xóa lọc
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-xs-12">
+        <button class="btn btn-success pull-right" (click)="ship()">Lên vận đơn</button>
+      </div>
+    </div>
+  </div>
+  <div class="box-body no-padding">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>
+          <input class="checkbox" type="checkbox" (change)="selectAll()" [checked]="statusSelectAll">
+        </th>
+        <th>Kênh</th>
+        <th>Khách hàng</th>
+        <th>Đơn hàng</th>
+        <th>Ghi chú</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd" *ngFor="let item of list;let i = index">
+        <td>
+          <input class="checkbox" type="checkbox" (change)="selectItem(item,i)" [checked]="selectors[i]">
+        </td>
+        <td>
+          <p><label class="label label-info">{{item.seller.name}}</label></p>
+          <p>{{item.created_at|amDateFormat: 'YYYY-MM-DD HH:mm'}}</p>
+          <p><label>{{item.created_at| amParse|amTimeAgo}}</label></p>
+          <p><label class="label label-default">{{item.channel}}</label></p>
+        </td>
+        <td>
+          <p>
+            <label>
+              <textarea [rows]="5" [cols]="30" readonly [value]="item.customer_text"></textarea>
+            </label>
+          </p>
+
+        </td>
+        <td>
+          <table class="table-responsive table table-bordered">
+            <thead>
+              <tr>
+                <th>Mã SP</th>
+                <th>Size</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let d of item.details">
+              <td>{{d.product_code}}</td>
+              <td>{{d.variant ? d.variant.name : ''}}</td>
+              <td class="text-right">{{d.unit_price|number:'1.0-0'}}</td>
+              <td class="text-right">{{d.quantity|number:'1.0-0'}}</td>
+              <td class="text-right">{{(d.quantity * d.unit_price)|number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-right">Thành tiền</th>
+              <td class="text-right">{{item.amount|number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-right">Phí ship</th>
+              <td class="text-right">{{item.ship_fee|number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-right">Tổng tiền</th>
+              <td class="text-right">{{item.total_amount|number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+              <th colspan="4" class="text-right">Phí CoD</th>
+              <td class="text-right">{{item.cod_fee|number:'1.0-0'}}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <label *ngIf="item.note">
+            <textarea [rows]="5" [cols]="20" readonly [value]="item.note"></textarea>
+          </label>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div class="box-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+          [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)"
+          [boundaryLinks]="true" class="pagination-sm" (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

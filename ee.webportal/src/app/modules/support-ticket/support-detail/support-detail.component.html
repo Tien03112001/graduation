@@ -1,0 +1,50 @@
+<body data-aos-easing="slide" data-aos-duration="800" data-aos-delay="0">
+<section class="ftco-section ftco-degree-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
+        <h2 class="mb-3">{{list.title}} <p class="label label-success" style="margin-left: 1030px ">
+          {{list.status}}</p></h2>
+        <h5>{{list.created_at|date:'dd-mm-yyyy'}} - {{list.ended_at|date:'dd-mm-yyyy'}}</h5>
+        <p *ngIf="checkTimeOneDay(list.ended_at)"><label class="label label-danger">{{list.ended_at|amParse|amTimeAgo}}</label></p>
+        <p *ngIf="checkTimeTowDay(list.ended_at)"><label class="label label-warning">{{list.ended_at|amParse|amTimeAgo}}</label></p>
+        <p *ngIf="checkTimeThreeDay(list.ended_at)"><label class="label label-success">{{list.ended_at|amParse|amTimeAgo}}</label></p>
+        <div disabled  [innerHTML]="list.content" style="overflow: auto; border-style: groove; border-top-width: 1px;border-left-width: 1px;border-bottom-width: 1px;border-right-width: 1px; width: 1100px; height: 200px">
+        </div>
+        <div class="pt-5 mt-5">
+          <h3 class="mb-5">
+            <button  *ngIf="list.status == 'NEW'" hidden type="button" title="Sửa dữ liệu" class="btn btn-primary"
+                    (click)="edit(list,list.id)" style="margin-left: 1020px">
+              Chỉnh sửa
+            </button>
+          </h3>
+          <div class="vcard bio">
+            <img>Đính kèm:
+          </div>
+          <div class="comment-body">
+            <h3>comment:</h3>
+            <p [hidden]="list.comment == null"
+               style="border-style: groove; border-top-width: 1px;border-left-width: 1px;border-bottom-width: 1px;border-right-width: 1px;">{{list.name}} {{list.comment}}</p>
+          </div>
+          <div class="comment-form-wrap pt-5">
+            <form action="/comments" class="p-5 bg-light" method="POST">
+              <input type="hidden" name="_token" value="auHMZEFOqr55HVoH18ZluT8p7yABJtRFweIPATQ9">
+              <input name="article_id" value="6" type="hidden">
+              <div class="form-group" >
+                <label for="content">Bình luận</label>
+                <textarea name="comment" id="comment" cols="30" rows="5" class="form-control" style="width: 1100px; height: 100px"></textarea>
+              </div>
+              <div class="form-group">
+                <input type="submit" value="Trả lời" class="btn py-3 px-4 btn-primary" style="margin-left: 1040px">
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+

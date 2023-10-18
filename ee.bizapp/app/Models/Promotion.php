@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Promotion extends Model
+{
+    protected $connection = 'web_system';
+    protected $table = 'promotions';
+}

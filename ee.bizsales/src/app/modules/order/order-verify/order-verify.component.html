@@ -1,0 +1,269 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Xác nhận</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<!--Tab-->
+<div class="modal-body container">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+      <a href="#home" role="tab" data-toggle="tab">
+        Thông tin khách hàng
+      </a>
+    </li>
+    <li>
+      <a href="#profile" role="tab" data-toggle="tab">
+        Thông tin sản phẩm
+      </a>
+    </li>
+    <li>
+      <a href="#messages" role="tab" data-toggle="tab">
+        Thông tin thanh toán
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <form class="tab-content" [formGroup]="formGroup" novalidate>
+    <!-- Tab 1 -->
+    <div class="tab-pane fade active in" id="home">
+      <div class="row" style="margin-top: 10px;">
+        <div class="col-xs-12">
+          <!-- Kênh -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[0].formControl].valid}">
+            <label [for]="fields[0].formControl">
+              {{fields[0].label}}
+            </label>
+            <select [id]="fields[0].formControl" [name]="fields[0].formControl"
+              [formControlName]="fields[0].formControl" class="form-control">
+              <option *ngFor="let option of fields[0].data" [value]="option['value']">{{option['text']}}</option>
+            </select>
+          </div>
+          <!-- Điện thoại -->
+          <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[2].formControl].valid}">
+            <label [for]="fields[2].formControl">
+              {{fields[2].label}}
+            </label>
+            <input [id]="fields[2].formControl" [name]="fields[2].formControl" [formControlName]="fields[2].formControl"
+              class="form-control" [placeholder]="fields[2].placeHolder" [type]="fields[2].typeof">
+          </div>
+          <!-- Tên -->
+          <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[1].formControl].valid}">
+            <label [for]="fields[1].formControl">
+              {{fields[1].label}}
+            </label>
+            <input [id]="fields[1].formControl" [name]="fields[1].formControl" [formControlName]="fields[1].formControl"
+              class="form-control" [placeholder]="fields[1].placeHolder" [type]="fields[1].typeof">
+          </div>
+          <!-- Tỉnh -->
+          <div class="form-group col-md-4" [ngClass]="{'has-error':!formGroup.controls[fields[4].formControl].valid}">
+            <label [for]="fields[4].formControl">
+              {{fields[4].label}}
+            </label>
+            <angular2-multiselect [id]="fields[4].formControl" [formControlName]="fields[4].formControl"
+              [data]="fields[4].data" [settings]="fields[4].config">
+            </angular2-multiselect>
+          </div>
+          <!-- Huyện -->
+          <div class="form-group col-md-4" [ngClass]="{'has-error':!formGroup.controls[fields[5].formControl].valid}">
+            <label [for]="fields[5].formControl">
+              {{fields[5].label}}
+            </label>
+            <angular2-multiselect [id]="fields[5].formControl" [formControlName]="fields[5].formControl"
+              [data]="fields[5].data" [settings]="fields[5].config">
+            </angular2-multiselect>
+          </div>
+          <!-- Xã -->
+          <div class="form-group col-md-4" [ngClass]="{'has-error':!formGroup.controls[fields[6].formControl].valid}">
+            <label [for]="fields[6].formControl">
+              {{fields[6].label}}
+            </label>
+            <angular2-multiselect [id]="fields[6].formControl" [formControlName]="fields[6].formControl"
+              [data]="fields[6].data" [settings]="fields[6].config">
+            </angular2-multiselect>
+          </div>
+          <!-- Địa chỉ -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[3].formControl].valid}">
+            <label [for]="fields[3].formControl">
+              {{fields[3].label}}
+            </label>
+            <input [id]="fields[3].formControl" [name]="fields[3].formControl" [formControlName]="fields[3].formControl"
+              class="form-control" [placeholder]="fields[3].placeHolder" [type]="fields[3].typeof">
+          </div>
+          <!-- Yêu cầu -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[7].formControl].valid}">
+            <label [for]="fields[7].formControl">
+              {{fields[7].label}}
+            </label>
+            <textarea [id]="fields[7].formControl" [name]="fields[7].formControl"
+              [formControlName]="fields[7].formControl" class="form-control" [placeholder]="fields[7].placeHolder"
+              [rows]="fields[7].config['rows']">
+                    </textarea>
+          </div>
+          <!-- Ghi chú -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[9].formControl].valid}">
+            <label [for]="fields[8].formControl">
+              {{fields[8].label}}
+            </label>
+            <textarea [id]="fields[8].formControl" [name]="fields[8].formControl"
+              [formControlName]="fields[8].formControl" class="form-control" [placeholder]="fields[8].placeHolder"
+              [rows]="fields[8].config['rows']">
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tab 2 -->
+    <div class="tab-pane fade" id="profile">
+      <div class="row">
+        <div class="col-xs-12">
+          <h4>Thông tin sản phẩm đặt hàng</h4>
+
+          <div class="col-md-12">
+            <div class="form-group"
+              [ngClass]="{'has-error':!formGroup.controls[fields[9].formControl].valid}">
+              <angular2-multiselect [(ngModel)]="productList" [id]="fields[9].formControl"
+                [formControlName]="fields[9].formControl" [data]="fields[9].data" [settings]="fields[9].config"
+                (ngModelChange)="addProduct(productList)">
+              </angular2-multiselect>
+            </div>
+          </div>
+          <div class="col-md-12" style="display: flex; justify-content: space-between;">
+            <table class="table-responsive table table-bordered table-hover form-group">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Mã SP</th>
+                  <th>Size</th>
+                  <th>Giá</th>
+                  <th>Số lượng</th>
+                  <th>Thành tiền</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd" *ngFor="let item of arrProduct,let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>{{item.product.code}}</td>
+                  <td>
+                    <select class="form-control" [(ngModel)]="item.variant_id" [ngModelOptions]="{standalone :true}"
+                      (ngModelChange)="checkArr(item.variant_id, i)">
+                      <option selected hidden disabled value="0">Chọn một</option>
+                      <option *ngFor="let v of item.product.variants" [value]="v.id">{{v.name}}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" min="0" oninput="this.value = Math.abs(this.value)" [(ngModel)]="item.unit_price" [ngModelOptions]="{standalone :true}"
+                      (ngModelChange)="updateCart()">
+                  </td>
+                  <td>
+                    <input type="number" min="1" oninput="this.value = Math.abs(this.value)" [(ngModel)]="item.quantity" [ngModelOptions]="{standalone :true}" value="1"
+                      (ngModelChange)="updateCart()">
+                  </td>
+                  <td class="text-right">{{item.unit_price * item.quantity | number:'1.0-0'}}</td>
+                  <td style="text-align: center">
+                    <button type="button" title="Xóa sản phẩm" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                      popoverTitle="Xóa sản phẩm" popoverMessage="Bạn thực sự muốn Xóa sản phẩm?" placement="top"
+                      confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
+                      (confirm)="deleteArr(i)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-12">
+            <!-- Phí vận chuyển -->
+            <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[10].formControl].valid}">
+              <label [for]="fields[10].formControl">
+                {{fields[10].label}}
+              </label>
+              <input [id]="fields[10].formControl" [name]="fields[10].formControl" (ngModelChange)="updateCart()"
+                [formControlName]="fields[10].formControl" class="form-control" [placeholder]="fields[10].placeHolder"
+                [type]="fields[10].typeof">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <!-- Khuyến mãi -->
+            <div class="form-group col-md-6"
+              [ngClass]="{'has-error':!formGroup.controls[fields[11].formControl].valid}">
+              <label [for]="fields[11].formControl">
+                {{fields[11].label}}
+              </label>
+              <angular2-multiselect [id]="fields[11].formControl" [formControlName]="fields[11].formControl"
+                [data]="fields[11].data" [settings]="fields[11].config">
+              </angular2-multiselect>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <!-- Tổng tiền -->
+            <div class="form-group col-md-6"
+              [ngClass]="{'has-error':!formGroup.controls[fields[12].formControl].valid   && !formGroup.controls[fields[12].formControl].disabled}">
+              <label [for]="fields[12].formControl">
+                {{fields[12].label}}
+              </label>
+              <input [id]="fields[12].formControl" [name]="fields[12].formControl"
+                [formControlName]="fields[12].formControl" class="form-control" [placeholder]="fields[12].placeHolder"
+                [value]="formGroup.controls['total_amount'].value" [type]="fields[12].typeof">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tab 3 -->
+    <div class="tab-pane fade" id="messages">
+      <div class="row" style="margin-top: 10px;">
+        <div class="col-xs-12">
+          <!-- Hình thức thanh toán -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[13].formControl].valid}">
+            <label [for]="fields[13].formControl">
+              {{fields[13].label}}
+            </label>
+            <select [id]="fields[13].formControl" [name]="fields[13].formControl"
+              [formControlName]="fields[13].formControl" class="form-control">
+              <option *ngFor="let option of fields[13].data" [value]="option['value']">{{option['text']}}</option>
+            </select>
+          </div>
+          <!-- Phí CoD -->
+          <div class="form-group col-md-12" [ngClass]="{'has-error':!formGroup.controls[fields[14].formControl].valid}">
+            <label [for]="fields[14].formControl">
+              {{fields[14].label}}
+            </label>
+            <input [id]="fields[14].formControl" [name]="fields[14].formControl"
+              [formControlName]="fields[14].formControl" class="form-control" [placeholder]="fields[14].placeHolder"
+              [type]="fields[14].typeof">
+          </div>
+          <!--Thông tin thanh toán-->
+          <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[15].formControl].valid}">
+            <label [for]="fields[15].formControl">
+              {{fields[15].label}}
+            </label>
+            <textarea [id]="fields[15].formControl" [name]="fields[15].formControl"
+              [formControlName]="fields[15].formControl" class="form-control" [placeholder]="fields[15].placeHolder"
+              [rows]="fields[15].config['rows']" style="min-height: 114px; max-width: 530px;">
+                    </textarea>
+          </div>
+          <!-- Tải ảnh -->
+          <div class="form-group col-md-6" [ngClass]="{'has-error':!formGroup.controls[fields[16].formControl].valid}">
+            <label [for]="fields[16].formControl">
+              {{fields[16].label}}
+            </label>
+            <input [id]="fields[16].formControl" [name]="fields[16].formControl" class="form-control"
+              [placeholder]="fields[16].placeHolder" type="file"
+              (change)="fields[16].config['onFileChange'](formGroup,fields[16].formControl,$event)"
+              accept="{{fields[16].config['accept']}}" style="height: 114px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" [disabled]="!formGroup.valid" (click)="verify()">Xác nhận</button>
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

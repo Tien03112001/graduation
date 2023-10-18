@@ -1,0 +1,49 @@
+<div class="box box-default">
+  <div class="box-header">
+    <div class="row">
+      <div class="col-xs-12">
+        <button type="button" title="Làm mới" class="btn btn-default margin-r-5" (click)="load()">
+          <i class="fa fa-refresh"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="box-body">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Mã SP</th>
+        <th>Cần có</th>
+        <th>Đã có</th>
+        <th>Trạng thái</th>
+        <th>Cập nhật</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd" *ngFor="let item of list;let i = index">
+        <td>{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+        <td>{{item['code']}}</td>
+        <td class="text-right">{{item['need']}}</td>
+        <td class="text-right">
+          <div *ngIf="item['has']">{{item['has']['quantity']}}</div>
+        </td>
+        <td>
+          <div *ngIf="item['has']">
+            <p *ngIf="item['has']['in_stock']==0"><label class="label label-danger">Hết hàng</label></p>
+            <label class="label label-warning"
+                   *ngIf="item['need']>item['has']['quantity']">Thiếu {{item['need'] - item['has']['quantity']}}</label>
+            <label class="label label-success"
+                   *ngIf="item['need']>0&&item['need']==item['has']['quantity']">Đủ</label>
+            <label class="label label-primary"
+                   *ngIf="item['need']<item['has']['quantity']">Thừa {{item['has']['quantity'] - item['need']}}</label>
+          </div>
+        </td>
+        <td>
+          <div *ngIf="item['has']">{{item['has']['quantity']|amTimeAgo}}</div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

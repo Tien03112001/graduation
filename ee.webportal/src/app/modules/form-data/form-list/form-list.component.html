@@ -1,0 +1,239 @@
+<!--<div class="panel panel-default">-->
+<!--  <div class="panel-heading">-->
+<!--    <div class="row">-->
+<!--      <div class="col-xs-12">-->
+<!--        <form [formGroup]="searchForm" (ngSubmit)="load()">-->
+<!--          <div class="form-group col-xs-6">-->
+<!--            <label for="search">Tìm kiếm theo tên</label>-->
+<!--            <input type="text" class="form-control" formControlName="search" id="search" name="search"-->
+<!--                   placeholder="Tìm kiếm form">-->
+<!--          </div>-->
+<!--          <div class="col-xs-12">-->
+<!--            <button class="btn btn-default" type="submit">-->
+<!--              Tìm kiếm-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--  <table class="table table-bordered table-hover">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>Danh sách form</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr class="odd" *ngFor="let item of list;let i = index">-->
+<!--      <td>-->
+<!--        <div class="panel-group">-->
+<!--          <div class="panel panel-default">-->
+<!--            <div class="panel-heading">-->
+<!--              <h4 class="panel-title">-->
+<!--                <a data-toggle="collapse" (click)="loadFormData(item)" href="#collapse{{i}}">{{item.name}}</a>-->
+<!--              </h4>-->
+<!--            </div>-->
+
+<!--            <div id="collapse{{i}}" class="panel-collapse collapse">-->
+<!--              <div class="panel-body">-->
+
+<!--                <table class="table table-bordered table-hover">-->
+<!--                  <thead>-->
+<!--                  <tr>-->
+<!--                    <th>Dữ liệu form {{item.name}}</th>-->
+<!--                  </tr>-->
+<!--                  </thead>-->
+<!--                  <tbody>-->
+<!--                  <tr class="odd" *ngFor="let items of listData[item.id];let j = index">-->
+<!--                    <td>-->
+<!--                      <div class="panel-group">-->
+<!--                        <div class="panel panel-default">-->
+
+<!--                          <div class="panel-heading" >-->
+<!--                            <h4 class="panel-title">-->
+<!--                              <a data-toggle="collapse" href="#collapse1{{j}}">{{items.form_name}}</a>-->
+<!--                            </h4>-->
+<!--                          </div>-->
+
+<!--                          <div id="collapse1{{j}}" class="panel-collapse collapse">-->
+<!--                            <table  class="table table-bordered table-hover" id="table">-->
+<!--                              <thead>-->
+<!--                              <tr>-->
+<!--                                <th>#</th>-->
+<!--                                <th>Tên</th>-->
+<!--                                <th>Giá trị</th>-->
+<!--                              </tr>-->
+<!--                              </thead>-->
+<!--                              <tr *ngFor="let itemss of items.form_values; let j = index">-->
+<!--                                <td style="width: 5%">{{j + 1}}</td>-->
+<!--                                <td>{{itemss.form_attribute.name}}</td>-->
+<!--                                <td>{{itemss.value}}</td>-->
+<!--                              </tr>-->
+<!--                            </table>-->
+<!--                          </div>-->
+
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                  </tbody>-->
+<!--                </table>-->
+<!--                <div class="panel-footer">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-xs-12">-->
+<!--                      <pagination [totalItems]="listPaginations[item.id].totalItems"-->
+<!--                                  [(ngModel)]="listPaginations[item.id].currentPage"-->
+<!--                                  [maxSize]="listPaginations[item.id].maxSize"-->
+<!--                                  [itemsPerPage]="listPaginations[item.id].itemsPerPage"-->
+<!--                                  (pageChanged)="tablePageChanged($event,item.id)" [boundaryLinks]="true"-->
+<!--                                  class="pagination-sm"-->
+<!--                                  (numPages)="listPaginations[item.id].numPages = $event"></pagination>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+<!--              <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label-->
+<!--                class="label label-default">Ẩn</label></a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+
+
+<!--  <div class="panel-footer">-->
+<!--    <div class="row">-->
+<!--      <div class="col-xs-6">-->
+<!--        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"-->
+<!--                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"-->
+<!--                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"-->
+<!--                    (numPages)="pagination.numPages = $event"></pagination>-->
+<!--      </div>-->
+<!--      <div class="col-xs-6">-->
+<!--        <div class="box-go-to">-->
+<!--          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">-->
+<!--          <span class="col-xs-1">/</span>-->
+<!--          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>-->
+<!--          <div class="col-xs-4">-->
+<!--            <button (click)="goToPage()">Đến</button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <label for="search">Tìm kiếm theo tên</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Tìm kiếm theo tên">
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Quản lý dữ liệu form</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list; let a = index">
+      <td>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" (click)="loadFormData(item)" href="#collapse{{a}}">{{item.name}}</a>
+              </h4>
+            </div>
+
+            <div id="collapse{{a}}" class="panel-collapse collapse">
+              <div class="panel-body">
+                <table class="table table-bordered table-hover" id="table">
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th *ngFor="let atribute of listAtribute[item.id]; let j = index;">
+                      {{atribute.name}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tr *ngFor="let items of listData[item.id]; let j = index">
+                    <td style="width: 5%">{{j + 1}}</td>
+                    <td *ngFor="let atribute of listAtribute[item.id]"
+                        [ngStyle]="{'width': 85/atribute.length+'%'}">
+                      <div *ngFor="let cell of items.form_values">
+                        <div *ngIf="cell.form_id == atribute.form_id && cell.attribute_id == atribute.id &&
+                                          cell.data_id == items.id">
+                          {{cell.value}}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                </table>
+                <div class="panel-footer">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <pagination [totalItems]="listPaginations[item.id].totalItems"
+                                  [(ngModel)]="listPaginations[item.id].currentPage"
+                                  [maxSize]="listPaginations[item.id].maxSize"
+                                  [itemsPerPage]="listPaginations[item.id].itemsPerPage"
+                                  (pageChanged)="tablePageChanged($event,item.id)" [boundaryLinks]="true"
+                                  class="pagination-sm"
+                                  (numPages)="listPaginations[item.id].numPages = $event"></pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a class="text-center" data-toggle="collapse" href="#collapse{{a}}"><label
+                class="label label-default">Ẩn</label></a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

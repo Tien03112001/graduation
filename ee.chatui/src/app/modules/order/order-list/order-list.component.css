@@ -1,0 +1,40 @@
+.order-view {
+    height: 660px;
+    background: #f2ffd5;
+    border-left:  1px solid #999;
+    margin-right: 15px;
+}
+
+.order-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-bottom:1px solid #999 ;
+}
+
+.order-header-title {
+    font-size: 20px;
+    margin-left: 10px;
+    font-weight: 700;
+    display: block;
+    margin: auto;
+}
+
+.order-form-detail {
+    padding: 0 10px;
+}
+
+.order-form-title {
+    padding-top: 10px;
+    font-size: 17px;
+    font-weight: 400;
+    display: block;
+}
+
+.customer-info {
+    margin: 10px;
+}
+
+.form-control {
+    margin-bottom: 10px;
+}

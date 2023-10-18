@@ -1,0 +1,106 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-xs-6">
+            <label for="search">Tìm kiếm theo tiều đề</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Nhập chuỗi kí tự">
+          </div>
+          <div class="form-group col-xs-6">
+            <label for="published">Tìm kiếm theo trạng thái</label>
+            <select id="published" name="status" class="form-control" formControlName="status">
+              <option value="">Tất cả</option>
+              <option [value]="0">NEW</option>
+              <option [value]="1">PENDING</option>
+              <option [value]="2">COMPLETED</option>
+              <option [value]="3">CANCELED</option>
+            </select>
+          </div>
+          <div class="col-xs-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới bài viết" class="btn btn-primary btn-sm pull-right" (click)="create()">
+          <i class="fa fa-plus"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Tiêu đề</th>
+      <th>Trạng thái</th>
+      <th>Ngày khởi tạo</th>
+      <th>Ngày hết hạn</th>
+      <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index" (click)="RowSelected(item)">
+      <td>{{i + 1}}</td>
+      <td>
+        <p>
+          <a routerLink="support-details/{{item.id}}" [title]="item.content">{{item.title}}</a>
+        </p>
+      </td>
+      <td class="text-center">
+        <label *ngIf="item.status == 'NEW' " class="label label-success" >{{item.status}}</label>
+        <label *ngIf="item.status == 'PENDING' " class="label label-info" >{{item.status}}</label>
+        <label *ngIf="item.status == 'COMPLETED' " class="label label-warning" >{{item.status}}</label>
+        <label *ngIf="item.status == 'CANCELED' " class="label label-danger" >{{item.status}}</label>
+      </td>
+      <td class="text-center">
+        {{item.created_at| date: 'dd-mm-yyyy'}}
+      </td>
+      <td class="text-center">
+        {{item.ended_at}}
+      </td>
+      <td>
+        <div class="clearfix text-center">
+          <button *ngIf="item.status == 'NEW'" hidden type="button" title="Sửa dữ liệu" class="btn btn-default btn-sm"
+                  (click)="edit(item,i)">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </button>
+          <button *ngIf="item.status == 'NEW'" hidden type="button" title="xóa dữ liệu" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                  popoverTitle="Xóa"
+                  popoverMessage="Bạn thực sự muốn xóa?"
+                  placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                  cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+            <i class="fa fa-remove" aria-hidden="true"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

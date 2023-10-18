@@ -1,0 +1,81 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-6">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group">
+            <label for="search">Từ khóa</label>
+            <input type="text" class="form-control" formControlName="search" id="search" name="search"
+                   placeholder="Tìm kiếm theo tên, mô tả">
+          </div>
+          <!--<div class="form-group">-->
+          <!--<input type="checkbox" formControlName="is_mine" value="{{1}}"/>Khách hàng của tôi-->
+          <!--</div>-->
+          <button class="btn btn-default" type="submit">
+            Tìm kiếm
+          </button>
+        </form>
+      </div>
+      <div class="col-xs-6">
+        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="create()">Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body" style="overflow: auto;">
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Tên</th>
+        <th>Tên đăng nhập</th>
+        <th>Số điện thoại</th>
+        <th>Email</th>
+        <th>Mô tả</th>
+        <th>Thao tác</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd" *ngFor="let item of list;let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.username}}</td>
+        <td>{{item.phone}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.description}}</td>
+        <td>
+          <button type="button" class="btn btn-info" (click)="edit(item,i)">
+            <i class="fa fa-pencil-square-o"></i>
+          </button>
+          <button type="button" class="btn btn-danger" mwlConfirmationPopover popoverTitle="Xóa"
+                  popoverMessage="Bạn thực sự muốn xóa?"
+                  placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                  cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

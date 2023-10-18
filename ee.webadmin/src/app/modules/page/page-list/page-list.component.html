@@ -1,0 +1,148 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-md-6" *ngFor="let f of searchControls">
+            <ng-template [ngIf]="f.type=='input'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                     class="form-control"
+                     [placeholder]="f.placeHolder" [type]="f.typeof">
+            </ng-template>
+            <ng-template [ngIf]="f.type=='textarea'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                        class="form-control"
+                        [placeholder]="f.placeHolder">
+          </textarea>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='checkbox'">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" [id]="f.formControl" [name]="f.formControl"
+                         [formControlName]="f.formControl">
+                  {{f.label}}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                      class="form-control">
+                <option *ngFor="let option of f.data" [value]="option['id']">{{option['name']}}</option>
+              </select>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select2'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
+                                    [data]="f.data" [settings]="f.config">
+              </angular2-multiselect>
+            </ng-template>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+            <button class="btn btn-default" type="button" (click)="removeFilter()">
+              Xóa lọc
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới page" class="btn btn-primary pull-right" (click)="create()">
+          <i class="fa fa-plus"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="list.length == 0" class="text-center">
+    <h1>Không tìm thấy kết quả tìm kiếm</h1>
+  </div>
+  <table class="table table-bordered table-hover" *ngIf="list.length > 0">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Tên trang</th>
+      <th>Đường dẫn</th>
+      <th>Trạng thái</th>
+      <th>Blocks</th>
+      <th>SEO</th>
+      <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index">
+      <td>{{i + 1}}</td>
+      <td>
+        <p>{{item.name}}</p>
+        <button type="button" class="btn btn-info btn-xs pull-right" (click)="createArticle(item,i)"
+                *ngIf="!item.article">
+          <i class="fa fa-plus-circle"></i>
+        </button>
+      </td>
+      <td>
+        <a [href]="item.full_path" target="_blank" *ngIf="item.article" title="Xem trang">{{item.slug}}</a>
+      </td>
+      <td>
+        <div class="pull-left" style="margin-right: 5px">
+          <ui-switch [checked]="item.published" (change)="onPublishedChange(item,i,$event)"></ui-switch>
+        </div>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-sm" (click)="openBlocks(item,i)">
+          <i class="fa fa-list-ol"></i> {{item.blocks_count}} blocks
+        </button>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-sm" (click)="editMeta(item)" *ngIf="item.meta">
+          <i class="fa fa-google"></i> Meta
+        </button>
+        <button type="button" class="btn btn-default btn-sm" (click)="openStructured(item,i)">
+          <i class="fa fa-address-card"></i> Structured Data
+        </button>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-sm" (click)="edit(item,i)">
+          <i class="fa fa-pencil-square-o"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover popoverTitle="Xóa"
+                popoverMessage="Bạn thực sự muốn xóa?"
+                placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+          <i class="fa fa-remove"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer" *ngIf="list.length > 0">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

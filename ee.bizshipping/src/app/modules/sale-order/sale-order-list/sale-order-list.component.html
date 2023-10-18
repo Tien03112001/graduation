@@ -1,0 +1,229 @@
+<div class="box box-default">
+  <div class="box-header">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()" class="row" novalidate>
+          <div [ngClass]="f['class']" *ngFor="let f of searchControls">
+            <div class="form-group">
+              <ng-template [ngIf]="f.type=='input'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                  class="form-control" [placeholder]="f.placeHolder" [type]="f.typeof">
+              </ng-template>
+              <ng-template [ngIf]="f.type=='textarea'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                  class="form-control" [placeholder]="f.placeHolder" [rows]="f.config['rows']">
+                </textarea>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                  class="form-control">
+                  <option *ngFor="let option of f.data" [value]="option[f.config['primaryKey']]">
+                    {{option[f.config['labelKey']]}}</option>
+                </select>
+              </ng-template>
+              <ng-template [ngIf]="f.type=='select2'">
+                <label [for]="f.formControl">
+                  {{f.label}}
+                </label>
+                <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl" [data]="f.data"
+                  [settings]="f.config">
+                </angular2-multiselect>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <button class="btn btn-default margin-r-5" type="submit" [disabled]="!searchForm.valid">
+                <i class="fa fa-search"></i> Tìm kiếm
+              </button>
+              <button class="btn btn-default" type="button" (click)="removeFilter()">
+                <i class="fa fa-remove"></i> Xóa lọc
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="box-body no-padding">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th style="width: 5%;text-align: center;">#</th>
+          <th style="width: 8%">Kênh</th>
+          <th>Khách hàng</th>
+          <th>Đơn hàng</th>
+          <th>Giao hàng</th>
+          <th>Ghi chú</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd" *ngFor="let item of list;let i = index">
+          <td>{{i + 1}}</td>
+          <td>
+            <p><label class="label label-info">{{item.seller.name}}</label></p>
+            <p style="margin-bottom: 5px;">{{item.created_at|amDateFormat: 'YYYY-MM-DD'}}</p>
+            <p>{{item.created_at|amDateFormat: 'HH:mm:ss'}}</p>
+            <p><label>{{item.created_at| amParse|amTimeAgo}}</label></p>
+            <p><label class="label label-default">{{item.channel}}</label></p>
+          </td>
+          <td>
+            <p>
+              <label>
+                <textarea [rows]="5" [cols]="25" style="max-width: 200px;" readonly
+                  [value]="item.customer_text"></textarea>
+              </label>
+            </p>
+            <div *ngIf="item.note">
+              <p><u>Ghi chú:</u></p>
+              <label>
+                <textarea [rows]="5" [cols]="25" readonly [value]="item.note"></textarea>
+              </label>
+            </div>
+          </td>
+          <td>
+            <table class="table-responsive table table-bordered">
+              <thead>
+                <tr>
+                  <th>Mã SP</th>
+                  <th>Size</th>
+                  <th>Đơn giá</th>
+                  <th>Số lượng</th>
+                  <th>Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of item.details">
+                  <td>{{d.product_code}}</td>
+                  <td>{{d.variant ? d.variant.name : ''}}</td>
+                  <td class="text-right">{{d.unit_price|number:'1.0-0'}}</td>
+                  <td class="text-right">{{d.quantity|number:'1.0-0'}}</td>
+                  <td class="text-right">{{(d.quantity * d.unit_price)|number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-right">Thành tiền</th>
+                  <td class="text-right">{{item.amount|number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-right">Phí ship</th>
+                  <td class="text-right">{{item.ship_fee|number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-right">Tổng tiền</th>
+                  <td class="text-right">{{item.total_amount|number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-right">Phí CoD</th>
+                  <td class="text-right">{{item.cod_fee|number:'1.0-0'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <p><label class="label label-default">{{item.status}}</label></p>
+            <p><label>{{item.updated_at| amParse|amTimeAgo}}</label></p>
+
+            <div *ngIf="!item.shipping&&item.status=='Chuẩn bị hàng'">
+              <a class="btn btn-success" [routerLink]="['..','ship']" title="Giao hàng">
+                <i class="fa fa-truck"></i>
+              </a>
+              <!-- <button class="btn btn-warning btn-xs" (click)="reUpdate(item,i)" title="Cập nhật lại">
+                <i class="fa fa-refresh"></i>
+              </button> -->
+            </div>
+
+            <p *ngIf="item.status!='Chuẩn bị hàng'&&item.status!='Lên đơn'&&item.status!='Lưu nháp'&&item.status!='Xác nhận'">
+              <!-- Hoàn thành -->
+              <button class="btn btn-success btn-xs" (click)="done(item,i)" title="Hoàn thành" *ngIf="item.status!='Hoàn thành'&&item.status!='Hủy đơn'&&item.status!='Đã nhận đổi'&&item.status!='Hoàn hàng'&&item.status!='Đã hoàn về'&&item.status!='Hoàn tiền'&&item.status!='Đã hoàn tiền'">
+                <i class="fa fa-check-circle"></i>
+              </button>
+              <!-- Hoàn hàng -->
+              <button class="btn btn-warning btn-xs" (click)="return(item,i)" title="Hoàn hàng" *ngIf="item.status=='Hoàn thành'">
+                <i class="fa fa-rotate-left"></i>
+              </button>
+              <!-- Hủy hàng -->
+              <button class="btn btn-danger btn-xs" (click)="cancel(item,i)" title="Hủy đơn" *ngIf="item.status!='Hoàn thành'&&item.status!='Hủy đơn'&&item.status!='Đã nhận đổi'&&item.status!='Hoàn hàng'&&item.status!='Đã hoàn về'&&item.status!='Hoàn tiền'&&item.status!='Đã hoàn tiền'">
+                <i class="fa fa-remove"></i>
+              </button>
+              <!-- Hoàn hàng -->
+              <button class="btn btn-success btn-xs" (click)="receiveRefund(item,i)" title="Đã nhận hoàn" *ngIf="item.status=='Hoàn hàng'">
+                <i class="fa fa-check-circle"></i>
+              </button>
+              <!-- Hoàn tiền -->
+              <button class="btn btn-success btn-xs" (click)="refund(item,i)" title="Hoàn tiền" *ngIf="item.status=='Đã hoàn về'">
+                <i class="fa fa-check-circle"></i>
+              </button>
+            </p>
+            <div *ngIf="item.shipping">
+              <p>
+                <label class="label label-warning">{{item.shipping.status}}</label>
+              </p>
+              <p>
+                <label class="label label-default">{{item.shipping.unit ? item.shipping.unit.name : ''}}</label>
+              </p>
+              <p>
+                <label class="label label-default">
+                  <a href="javascript:void(0)" (click)="infoShipping(item.shipping,item,i)">Mã
+                    {{item.shipping.code}}</a>
+                </label>
+                <button class="btn btn-warning btn-xs" (click)="recreate(item.shipping,item,i)"
+                  title="Tạo lại mã vận đơn" *ngIf="item.shipping.status_id<=2">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </p>
+            </div>
+
+          </td>
+          <td>
+            <p>
+              <label>
+                <textarea [rows]="5" [cols]="10" style="max-width: 95px" readonly [value]="item.note_ship"></textarea>
+              </label>
+            </p>
+          </td>
+          <td style="text-align: center;">
+            <button type="button" title="Ghi chú" class="btn btn-default btn-sm" (click)="note(item,i)">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <div style="margin-top: 20px;" *ngIf="item.shipping">
+              <button type="button" class="btn btn-sm margin-r-5"
+                [ngClass]="{'btn-success':!item.shipping.is_printed,'btn-danger':item.shipping.is_printed}"
+                (click)="printShippingBill(item)">
+                <i class="fa fa-print"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+          [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)"
+          [boundaryLinks]="true" class="pagination-sm" (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
