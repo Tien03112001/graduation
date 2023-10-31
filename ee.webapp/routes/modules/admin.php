@@ -30,6 +30,10 @@ Route::group(['middleware' => ['auth.owned_website']], function () {
         Route::get('', 'CacheController@index');
         Route::post('clear_cache_page', 'CacheController@clear');
     });
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('', 'OrderController@index');
+        Route::post('{id}', 'OrderController@update');
+    });
     Route::resource('users', 'UserController');
 
     Route::resource('articles', 'ArticleController');

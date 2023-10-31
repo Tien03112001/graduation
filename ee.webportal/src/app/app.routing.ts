@@ -45,6 +45,10 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/cache/cache.module#CacheModule'
   },
   {
+    path: 'orders',
+    loadChildren: 'app/modules/order/order.module#OrderModule'
+  },
+  {
     path: 'menus',
     loadChildren: 'app/modules/menu-position/menu-position.module#MenuPositionModule'
   },

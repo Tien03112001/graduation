@@ -8,6 +8,7 @@ import {FieldForm, ModalResult} from '../common';
 export abstract class AbstractModalComponent<T> implements OnInit, OnDestroy {
 
   public model: T;
+  public list: T[];
   public onHidden: EventEmitter<ModalResult<T>> = new EventEmitter();
   public formGroup: FormGroup;
 

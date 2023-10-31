@@ -187,7 +187,6 @@ export class PromotionEditComponent extends AbstractModalComponent<PromotionMeta
       } else {
         this.fields.splice(4);
       }
-
     });
   }
 

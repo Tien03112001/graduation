@@ -1,0 +1,149 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-md-6" *ngFor="let f of searchControls">
+            <ng-template [ngIf]="f.type=='input'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                     class="form-control"
+                     [placeholder]="f.placeHolder" [type]="f.typeof">
+            </ng-template>
+            <ng-template [ngIf]="f.type=='textarea'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                        class="form-control"
+                        [placeholder]="f.placeHolder">
+          </textarea>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='checkbox'">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" [id]="f.formControl" [name]="f.formControl"
+                         [formControlName]="f.formControl">
+                  {{f.label}}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                      class="form-control">
+                <option *ngFor="let option of f.data" [value]="option['id']">{{option['name']}}</option>
+              </select>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select2'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
+                                    [data]="f.data" [settings]="f.config">
+              </angular2-multiselect>
+            </ng-template>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" type="submit">
+              Tìm kiếm
+            </button>
+            <button class="btn btn-default" type="button" (click)="removeFilter()">
+              Xóa lọc
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới order" class="btn btn-primary pull-right" (click)="create()">
+          <i class="fa fa-plus"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>MÃ ĐH</th>
+      <th>Tên KH</th>
+      <th>SĐT</th>
+      <th>Địa chỉ</th>
+<!--      <th>Email</th>-->
+      <th>Phương Thức TT</th>
+      <th>Tổng tiền</th>
+      <th>Trạng thái đơn</th>
+      <th>Ngày đặt đơn </th>
+      <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index">
+      <td>{{i + 1}}</td>
+      <td>
+        <p>{{item.code}}</p>
+      </td>
+      <td>
+        <p>{{item.customer_name}}</p>
+      </td>
+      <td>
+        <p>{{item.customer_phone}}</p>
+      </td>
+      <td>
+        <p>{{item.customer_address}}</p>
+      </td>
+<!--      <td>-->
+<!--        <p>{{item.customer_email}}</p>-->
+<!--      </td>-->
+      <td>
+        <p>{{item.payment_type}}</p>
+      </td>
+      <td>
+        <p style="float: right">{{item.total_amount|number:'1.0-2'}}</p>
+      </td>
+      <td>
+        <p>{{item.order_status}}</p>
+      </td>
+
+      <td>
+        <p>{{item.created_at}}</p>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-sm" title="Chỉnh sửa" (click)="edit(item,i)">
+          <i class="fa fa-pencil-square-o"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" mwlConfirmationPopover title="Xóa"
+                popoverMessage="Bạn thực sự muốn xóa?"
+                placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item,i)">
+          <i class="fa fa-remove"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer" *ngIf="list.length > 0">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPage()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

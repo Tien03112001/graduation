@@ -148,6 +148,11 @@ export const APP_FEATURES = [
         icon: 'fa fa-motorcycle',
         link: '/shipping_fee_tables'
       },
+      {
+        name: 'Quản lý đơn hàng',
+        icon: 'fa fa-motorcycle',
+        link: '/orders'
+      },
     ]
   },
   {
