@@ -65,6 +65,10 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/user/user.module#UserModule'
   },
   {
+    path: 'charts',
+    loadChildren: 'app/modules/chart/chart.module#ChartModule'
+  },
+  {
     path: 'profile',
     loadChildren: 'app/modules/profile/profile.module#ProfileModule'
   },

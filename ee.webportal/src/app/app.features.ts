@@ -153,6 +153,11 @@ export const APP_FEATURES = [
         icon: 'fa fa-motorcycle',
         link: '/orders'
       },
+      {
+        name: 'Thống kê',
+        icon: 'fa fa-motorcycle',
+        link: '/charts'
+      },
     ]
   },
   {
