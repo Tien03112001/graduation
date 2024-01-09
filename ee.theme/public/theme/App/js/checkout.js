@@ -18,30 +18,10 @@ function onDistrictIdChange() {
         }
     })
 }
-document.addEventListener('DOMContentLoaded', (event) => {
-
-    var total_money = document.getElementById('total_money').value;
-    var discount_value=0;
-    if(document.getElementById('discount_valueM')||document.getElementById('discount_value'))
-    {
-        if(document.getElementById('discount_valueM')){
-            discount_value = parseInt(document.getElementById('discount_valueM').value);
-        }
-        if(document.getElementById('discount_value')){
-
-            discount_value= parseInt(document.getElementById('discount_value').value);
-        }
-    }
-    const VND = new Intl.NumberFormat('vi-VN', {
-        tyle: 'currency',
-        currency: 'VND',
-    });
-    money_total=total_money-discount_value;
-    document.getElementById("get_total").innerHTML = VND.format(money_total) +`đ`;
-    document.getElementById("get_totalP").innerHTML = VND.format(money_total)+`đ`;;
-    document.getElementById('total_money').value=money_total;
-
-});
+// document.addEventListener('DOMContentLoaded', (event) => {
+//
+//
+// });
 
 function getFee() {
     const provinceId = +document.getElementById('province_id').value;
@@ -89,6 +69,27 @@ function getFee() {
             // }
         })
     }
+    var total_money = document.getElementById('total_money').value;
+    var discount_value=0;
+    if(document.getElementById('discount_valueM')||document.getElementById('discount_value'))
+    {
+        if(document.getElementById('discount_valueM')){
+            discount_value = parseInt(document.getElementById('discount_valueM').value);
+        }
+        if(document.getElementById('discount_value')){
+
+            discount_value= parseInt(document.getElementById('discount_value').value);
+        }
+    }
+    const VND = new Intl.NumberFormat('vi-VN', {
+        tyle: 'currency',
+        currency: 'VND',
+    });
+    money_total=total_money-discount_value;
+    document.getElementById("get_total").innerHTML = VND.format(money_total) +`đ`;
+    document.getElementById("get_totalP").innerHTML = VND.format(money_total)+`đ`;;
+    document.getElementById('total_money').value=money_total;
+
 
 }
 

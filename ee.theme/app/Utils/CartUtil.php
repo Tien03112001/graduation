@@ -86,7 +86,7 @@ class CartUtil extends SingletonPattern
      * @param float $unitPrice
      * @return $this
      */
-    public function addItem(Product $p, int $quantity = 1, string $size, float $unitPrice = null)
+    public function addItem(Product $p, int $quantity , string $size, float $unitPrice = null)
     {
         if (isset($this->items[$p->id . ' ' . $size])) {
             if ($this->items[$p->id . ' ' . $size]['size'] == $size) {
@@ -94,10 +94,21 @@ class CartUtil extends SingletonPattern
             } else {
                 $item = [
                     'item' => $p->toArray(),
-                    'unit_price' => $unitPrice ?? $p->price,
+                    // 'unit_price' => $unitPrice ?? $p->price,
                     'quantity' => $quantity,
                     'size' => $size,
                 ];
+                if($p['promotions']->first()!=null)
+                {
+                    if( $this->getTotalQuantity()+$quantity<$p['promotions']->first()->min_products_count)
+                    {
+
+                        $item['unit_price'] = $p->price;
+                    }
+                    else{
+                        $item['unit_price']=$p['promotions']->first()->same_price;
+                    };
+                }
                 $item['amount'] = $item['unit_price'] * $quantity;
                 $this->items[$p->id . ' ' . $size] = $item;
 
@@ -105,10 +116,24 @@ class CartUtil extends SingletonPattern
         } else {
             $item = [
                 'item' => $p->toArray(),
-                'unit_price' => $unitPrice ?? $p->price,
+                // 'unit_price' => $unitPrice ?? $p->price,
                 'quantity' => $quantity,
                 'size' => $size,
             ];
+            if($p['promotions']->first()!=null)
+            {
+                if( $this->getTotalQuantity()+$quantity<$p['promotions']->first()->min_products_count)
+                {
+
+                    $item['unit_price'] = $p->price;
+                }
+                else{
+                    $item['unit_price']=$p['promotions']->first()->same_price;
+                };
+            }
+            else{
+                $item['unit_price'] = $p->price;
+            }
             $item['amount'] = $item['unit_price'] * $quantity;
             $this->items[$p->id . ' ' . $size] = $item;
         }
@@ -233,12 +258,40 @@ class CartUtil extends SingletonPattern
         $this->discountValue = 0;
         $this->productCount = count($this->items);
         foreach ($this->items as $item) {
-            $item['amount'] = $item['quantity'] * $item['unit_price'];
-            $this->totalAmount += $item['amount'];
+            // $item['amount'] = $item['quantity'] * $item['unit_price'];
+            // $this->totalAmount += $item['amount'];
             $this->totalQuantity += $item['quantity'];
+
         }
+        foreach($this->items as $item){
+
+            if($item['item']['promotions']!=null)
+            {
+                if( $this->totalQuantity<$item['item']['promotions'][0]['min_products_count'])
+                {
+                    $item['unit_price'] = $item['item']['price'];
+                    $item['amount'] = $item['quantity'] * $item['unit_price'];
+                    $this->items[key($this->items)]['unit_price'] = $item['item']['price'];
+                    $this->items[key($this->items)]['amount'] = $item['quantity'] * $item['unit_price'];
+                }
+                else{
+                    $item['unit_price']=$item['item']['promotions'][0]['same_price'];
+                    $this->items[key($this->items)]['unit_price'] = $item['item']['promotions'][0]['same_price'];
+                    $this->items[key($this->items)]['amount'] = $item['item']['promotions'][0]['same_price']*$item['quantity'];
+
+                };
+
+
+            }
+            else{
+                $item['unit_price']=$item['item']['price'];
+                $item['amount'] = $item['quantity'] * $item['unit_price'];
+            }
+
+            $this->totalAmount += $item['amount'];
+        }
+
         $this->total = $this->totalAmount - $this->discountValue + $this->shippingFee;
-        $this->applyVoucher($this->voucher);
         return $this;
     }
 

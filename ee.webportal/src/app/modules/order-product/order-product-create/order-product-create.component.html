@@ -1,0 +1,69 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Gắn sản phẩm</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="col-xs-12 margin-bottom">
+    <form [formGroup]="formSearchProduct" (ngSubmit)="searchProduct()">
+      <div class="form-group col-xs-6">
+        <input type="text" class="form-control" formControlName="search" placeholder="Nhập tên sản phẩm">
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-default" type="submit">
+          Tìm kiếm
+        </button>
+        <button class="btn btn-default" (click)="removeFilter()">
+          Xóa lọc
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Hình Ảnh</th>
+        <th>Tên</th>
+        <th>Chương trình khuyến mãi </th>
+        <th>Thao tác</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd" *ngFor="let item of listAvailableProducts;let i = index">
+        <td>{{i + 1}}</td>
+        <td>
+          <img width="100px" class="img-thumb" [src]="item.image">
+        </td>
+        <td>
+          <p>{{item.id}}</p>
+          <p>{{item.name}}</p>
+        </td>
+        <td>
+          <p *ngFor="let value of item.promotions">{{value.name}}</p>
+        </td>
+        <td *ngIf="item.promotions[0] != null" >
+          <button title="Gắn sản phẩm" type="button" class="btn btn-primary btn-sm" mwlConfirmationPopover
+                  popoverTitle="Xóa"
+                  popoverMessage="sản phẩm đã có trong chương trình khuyến mai khác, bạn có muốn gắn?"
+                  placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                  cancelText="No <i class='fa fa-remove'></i>" (confirm)="assign(item)">
+            <i class="fa fa-plus" aria-hidden="true">Thêm</i>
+          </button>
+        </td>
+        <td *ngIf="item.promotions[0] == null" >
+          <button title="Gắn sản phẩm" type="button" class="btn btn-primary btn-sm" (click)="assign(item)">
+            <i class="fa fa-plus" aria-hidden="true">Thêm</i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+<!--  <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="assign()">Gắn sản phẩm</button>-->
+  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+</div>

@@ -95,7 +95,6 @@ class OrderController extends RestController
                     'amount' => $item['unit_price'] * $item['quantity'],
                 ]);
             }
-
             $orderAttributes = [
                 'code' => strtoupper(Str::random(8)),
                 'customer_name' => $request->customer_name,
@@ -109,8 +108,8 @@ class OrderController extends RestController
                 'amount' => $cart->getTotalAmount(),
                 'shipping_fee' => $cart->getShippingFee(),
                 'vat' => 0,
-                'discount' => $cart->getDiscountValue(),
-                'total_amount' => $cart->getTotal(),
+                'discount' => $request->discount_value||0,
+                'total_amount' => $request->total_money - $request->discount_value + $request->shipping_fee,
                 'date_at' => now()->toDateString(),
                 'request' => $request->input('request'),
                 'payment_status' => OrderPaymentStatusEnum::PENDING,
@@ -119,6 +118,7 @@ class OrderController extends RestController
                     'items' => $items
                 ]
             ];
+
         } else {
 
             $product = $this->productRepository->findById($request->product_id);

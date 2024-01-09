@@ -26,7 +26,17 @@ Route::get('/test', function(){
 Route::group(['middleware' => ['auth.owned_website']], function () {
 
     Route::get('dashboard', 'DashboardController@index');
-
+    Route::group(['prefix' => 'cache'], function () {
+        Route::get('', 'CacheController@index');
+        Route::post('clear_cache_page', 'CacheController@clear');
+    });
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('', 'OrderController@index');
+        Route::post('{id}', 'OrderController@update');
+    });
+    Route::group(['prefix' => 'charts'], function () {
+        Route::get('', 'OrderController@export_chart');
+    });
     Route::resource('users', 'UserController');
 
     Route::resource('articles', 'ArticleController');

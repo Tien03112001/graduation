@@ -56,10 +56,10 @@ class ProductVariantController extends RestController
             DB::beginTransaction();
             $variantProduct['product_id'] = $request->input('product_id');
             $variantProduct['name'] = $request->input('name');
-            $variantProduct['weight'] = 0;
-            $variantProduct['length'] = 0;
-            $variantProduct['width'] = 0;
-            $variantProduct['height'] = 0;
+            // $variantProduct['weight'] = 0;
+            // $variantProduct['length'] = 0;
+            // $variantProduct['width'] = 0;
+            // $variantProduct['height'] = 0;
             $name_test = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::query('product_id', $request->input('product_id'))]);
             if ($name_test) {
                 return $this->errorClient(' Size ' . $request->input('name') . ' đã tồn tại');
@@ -70,6 +70,7 @@ class ProductVariantController extends RestController
             $iventoryProduct['variant_id'] = $model->id;
             $iventoryProduct['size'] = 0;
             $iventoryProduct['code'] = $model->name;
+            $iventoryProduct['quantity'] = 50;
             $this->iventoryProductRepository->create($iventoryProduct);
             DB::commit();
             return $this->success($model);
@@ -122,9 +123,9 @@ class ProductVariantController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if ($model->inventory_products->quantity > 0) {
-            return $this->errorClient('Không thể xóa do còn hàng');
-        }
+        // if ($model->inventory_products->quantity > 0) {
+        //     return $this->errorClient('Không thể xóa do còn hàng');
+        // }
         try {
             DB::beginTransaction();
             $this->repository->delete($model, ['inventory_products']);

@@ -106,10 +106,13 @@
       <td>
         <p>{{item.discount_percent}}</p>
       </td>
-      <td>
+      <td *ngIf="item.type==2 || item.type == 1"  >
         <button type="button" class="btn btn-default btn-sm" title="Chỉnh sửa" style="align-items: center" (click)="viewRole(item,i)">
           Xem
         </button>
+      </td>
+      <td *ngIf="item.type!=2 && item.type != 1"  >
+không đính kèm
       </td>
 
       <td>

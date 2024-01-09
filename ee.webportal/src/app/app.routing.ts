@@ -41,6 +41,14 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/banner-group/banner-group.module#BannerGroupModule'
   },
   {
+    path: 'cache',
+    loadChildren: 'app/modules/cache/cache.module#CacheModule'
+  },
+  {
+    path: 'orders',
+    loadChildren: 'app/modules/order/order.module#OrderModule'
+  },
+  {
     path: 'menus',
     loadChildren: 'app/modules/menu-position/menu-position.module#MenuPositionModule'
   },
@@ -55,6 +63,10 @@ export const MODULES_ROUTING = [
   {
     path: 'users',
     loadChildren: 'app/modules/user/user.module#UserModule'
+  },
+  {
+    path: 'charts',
+    loadChildren: 'app/modules/chart/chart.module#ChartModule'
   },
   {
     path: 'profile',

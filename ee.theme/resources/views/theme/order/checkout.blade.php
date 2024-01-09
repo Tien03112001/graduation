@@ -437,7 +437,7 @@
                                                     <tr class="woocommerce-shipping-totals shipping">
                                                         <th>Giá giảm</th>
                                                         <td data-title="Phí ship" colspan="4" >-<bdi>
-                                                                <input type="hidden" id="discount_value" value="{{$promotion['discount_value']}}">
+                                                                <input type="hidden" id="discount_value" name="discount_value" value="{{$promotion['discount_value']}}">
                                                                 <span>{{ number_format($promotion['discount_value'], 0, ',', '.') }}</span>đ
                                                                 <span class="woocommerce-Price-currencySymbol"> </span></bdi>
                                                         </td>

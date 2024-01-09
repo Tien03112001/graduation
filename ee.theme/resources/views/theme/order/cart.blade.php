@@ -201,10 +201,10 @@
                                                             href="/product_categories/{{ $products[$i]->category_slug }}/products/{{ $products[$i]->slug }}">{{ $products[$i]->name }}</a>
                                                     </h3>
 
-                                                    @if ($products[$i]->sale_price == $products[$i]->price)
+                                                    @if ($products[$i]->sale_price == null)
                                                         <h4 class="product-price">{{ number_format($products[$i]->price) }}đ</h4>
                                                     @endif
-                                                    @if ($products[$i]->sale_price < $products[$i]->price)
+                                                    @if ($products[$i]->sale_price != null)
                                                         <h4 class="product-price">{{ number_format($products[$i]->sale_price) }}đ
                                                         </h4>
                                                         <h4 class="product-old-price">{{ number_format($products[$i]->price) }}đ
@@ -263,10 +263,10 @@
                                                             href="/product_categories/{{ $products[$i]->category_slug }}/products/{{ $products[$i]->slug }}">{{ $products[$i]->name }}</a>
                                                     </h3>
 
-                                                    @if ($products[$i]->sale_price == $products[$i]->price)
+                                                    @if ($products[$i]->sale_price == null)
                                                         <h4 class="product-price">{{ number_format($products[$i]->price) }}đ</h4>
                                                     @endif
-                                                    @if ($products[$i]->sale_price < $products[$i]->price)
+                                                    @if ($products[$i]->sale_price != null)
                                                         <h4 class="product-price">{{ number_format($products[$i]->sale_price) }}đ
                                                         </h4>
                                                         <h4 class="product-old-price">{{ number_format($products[$i]->price) }}đ
