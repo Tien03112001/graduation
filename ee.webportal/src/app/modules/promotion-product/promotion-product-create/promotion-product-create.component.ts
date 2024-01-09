@@ -12,6 +12,7 @@ import {ObjectUtil} from '../../../core/utils';
 import {PromotionService} from '../../promotion/promotion.service';
 import {PromotionMeta} from '../../promotion/promotion.meta';
 import {RelatedProductMeta} from '../../related-product/related-product.meta';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-promotion-product-create',
@@ -25,6 +26,7 @@ export class PromotionProductCreateComponent extends AbstractModalComponent<Prom
     height: '350px'
   };
   listAvailableProducts: any;
+  checklist: any;
 
   onInit(): void {
   }
@@ -47,6 +49,11 @@ export class PromotionProductCreateComponent extends AbstractModalComponent<Prom
       let product_id =  this.model.product_id;
     this.productService.loadAvailableProducts(product_id,null ).subscribe((res: any) => {
         this.listAvailableProducts = res;
+        // this.checklist = [];
+      res.forEach((c) => { c.checked = false ;
+      });
+      // this.listAvailableProducts.push(this.checklist);
+      // console.log(this.listAvailableProducts);
       }, () => {
         this.listAvailableProducts = [];
       }
@@ -62,6 +69,18 @@ export class PromotionProductCreateComponent extends AbstractModalComponent<Prom
       this.load();
     }, () => this.service.toastFailedEdited());
   }
+  check() {
+    const selectedCheckboxes = this.listAvailableProducts.filter(checkbox => checkbox.checked);
+    console.log('Selected Checkboxes:', selectedCheckboxes);
+    let ids=[];
+    selectedCheckboxes.forEach((c) => { ids.unshift(c.id);
+    });
+
+    (<PromotionProductService>this.service).assignProducts(this.model.product_id, ids).subscribe((res: ProductMeta) => {
+      this.service.toastSuccessfullyEdited();
+      this.load();
+    }, () => this.service.toastFailedEdited());
+    }
   searchProduct() {
      let search = this.formSearchProduct.value;
       let product_id =  this.model.product_id;
@@ -74,6 +93,9 @@ export class PromotionProductCreateComponent extends AbstractModalComponent<Prom
   }
   removeFilter() {
     this.formSearchProduct.reset();
+  }
+  checkUncheckAll(evt) {
+    this.listAvailableProducts.forEach((c) => c.checked = evt.target.checked);
   }
 
   constructor(

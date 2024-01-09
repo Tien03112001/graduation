@@ -38,7 +38,7 @@
                                                                      data-src="{{ $product->image }}"
                                                                      id="main_product_image"></div>
                     </div>
-                    @if ($product->public_gallery_images != null)
+                    {{-- @if ($product->public_gallery_images != null)
                         <div class="thumbnail_images">
                             <ul id="thumbnail">
                                 @if ($product->public_gallery_images != null)
@@ -54,7 +54,7 @@
                                 @endif
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
             <div class="col-md-6">
@@ -139,14 +139,14 @@
                                     @if ($varientsProduct->first() != null)
                                         @foreach ($varientsProduct as $variant)
                                                 @foreach($variant->inventory_products as $value)
-                                                    @if($value->quantity>0)
+                                                    {{-- @if($value->quantity>0) --}}
                                                         <input type="radio" id="{{ $variant->name }}" name="size-radio"
                                                                value="{{ $variant->id }}">
                                                         <label for="{{ $variant->name }}">{{ $variant->name }}</label>
-                                                    @endif
-                                                    @if($value->quantity==0)
+                                                    {{-- @endif --}}
+                                                    {{-- @if($value->quantity==0)
                                                         <label class="out-of-stock" for="xl">{{ $variant->name }}</label>
-                                                    @endif
+                                                    @endif --}}
                                                 @endforeach
                                         @endforeach
                                     @endif
@@ -262,76 +262,6 @@
     </div>
     <!-- End Description & Review Tab -->
 
-    <!-- SP liên quan -->
-    @if ($product->related_products[0])
-        <section class="more-product container">
-            <div class="row">
-                <div class="section-title mb-30 text-center">
-                    <h4>Sản phẩm liên quan</h4>
-                </div>
-                <section class="section-products">
-                    <div class="container">
-                        <div class="row">
-                            @foreach ($product->related_products->take(4) as $p)
-                                <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div id="{{ $p->relation->slug }}" class="single-product">
-                                        <div class="part-1">
-                                            <div class="product-img-hd"
-                                                 onclick="redirectDetail('/product_categories/{{ $p->relation->category_slug }}/products/{{ $p->relation->slug }}')">
-                                                <img class="lazy"
-                                                     src="{{\App\Utils\ImageUtil::getMinUrl($p->relation->image)}}"
-                                                     data-src="{{$p->relation->image}}"></div>
-
-                                            @foreach ($p->relation->tags as $tag)
-                                                @if ($tag->summary == 'Sale' || $tag->summary == 'Mới' || $tag->summary == 'Hết hàng')
-                                                    @if ($tag->summary == 'Sale')
-                                                        <span
-                                                                class="sale discount">{{ explode(' ', $tag->name)[1] }}</span>
-                                                        <span
-                                                                class="discount">{{ explode(' ', $tag->name)[0] }}</span>
-                                                    @endif
-                                                    @if ($tag->summary != 'Sale')
-                                                        <span class="new">{{ $tag->name }}</span>
-                                                    @endif
-                                                @endif
-                                            @endforeach
-                                            <ul>
-                                                <li><a href="javascript:;"><i class="far fa-heart"></i></a></li>
-                                                <li><a href="javascript:;"
-                                                       onclick="redirectDetail('/product_categories/{{ $p->relation->category_slug }}/products/{{ $p->relation->slug }}')"><i
-                                                                class="far fa-shopping-bag"></i></a></li>
-                                            </ul>
-                                            <ul class="hover-size">
-                                                @foreach (\App\Utils\Caches\VariantUtil::getInstance()->getVariant($p->relation->id) as $item)
-                                                    <li><a href="javascript:;">
-                                                            <p>{{ $item->name }}</p>
-                                                        </a></li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                        <div class="part-2">
-                                            <h3 class="product-title"><a
-                                                        href="/product_categories/{{ $p->relation->category_slug }}/products/{{ $p->relation->slug }}">{{ $p->relation->name }}</a>
-                                            </h3>
-                                            @if ($p->relation->sale_price != null)
-                                                <h4 class="product-price">
-                                                    {{ number_format($p->relation->sale_price, 0, ',', '.') }} đ</h4>
-                                                <h4 class="product-old-price">
-                                                    {{ number_format($p->relation->sale_price, 0, ',', '.') }} đ</h4>
-                                            @else
-                                                <h4 class="product-price">
-                                                    {{ number_format($p->relation->sale_price, 0, ',', '.') }} đ</h4>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </section>
-    @endif
 
     <!-- SP đề xuất -->
     @if ($related_products != null)
@@ -389,10 +319,10 @@
                                                 <h4 class="product-price">
                                                     {{ number_format($r->sale_price, 0, ',', '.') }} đ</h4>
                                                 <h4 class="product-old-price">
-                                                    {{ number_format($r->sale_price, 0, ',', '.') }} đ</h4>
+                                                    {{ number_format($r->price, 0, ',', '.') }} đ</h4>
                                             @else
                                                 <h4 class="product-price">
-                                                    {{ number_format($r->sale_price, 0, ',', '.') }} đ</h4>
+                                                    {{ number_format($r->price, 0, ',', '.') }} đ</h4>
                                             @endif
                                         </div>
                                     </div>

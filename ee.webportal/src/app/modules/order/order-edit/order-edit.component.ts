@@ -25,26 +25,48 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
 
   onDestroy(): void {
   }
-  loadAllType() {
-    return [{
-      id: 0,
-      name: 'PENDING',
-    }, {
-      id: 1,
-      name: 'Xác thực',
-    }, {
-      id: 2,
-      name: 'Chuẩn bị hàng',
-    }, {
-      id: 3,
-      name: 'Đang giao',
-    }, {
-      id: 4,
-      name: 'Hoàn thành',
-    }, {
-      id: 5,
-      name: 'Hoàn về',
-    }, ];
+
+  loadAllType(status : any) {
+    if (status == 'PENDING') {
+      return [ {
+        id: 2,
+        name: 'Chuẩn bị hàng',
+      },
+        {
+          id: 6,
+          name: 'Hủy đơn',
+        }, ];
+    }
+    if (status == 'Chuẩn bị hàng') {
+      return [ {
+        id: 3,
+        name: 'Đang giao',
+      }, {
+        id: 7,
+        name: 'Hoàn về kho',
+      }, ];
+    }
+    if (status === 'Đang giao') {
+      return [{
+        id: 4,
+        name: 'Hoàn thành',
+      }, {
+        id: 5,
+        name: 'Hoàn về',
+      }
+      ];
+    }
+    if (status == 'Hoàn về') {
+      return [,
+        {
+          id: 7,
+          name: 'Hoàn về kho',
+        },
+      ];
+    }
+    if (status == 'Hoàn thành') {
+      return [];
+    }
   }
   buildForm(): FormGroup {
     return this.formBuilder.group({
@@ -57,30 +79,41 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
       order_status: new FormControl(null,),
     });
   }
+  loaded(): void {
+    this.formGroup.setValue({
+      code: this.model.code,
+      customer_name: this.model.customer_name,
+      customer_phone: this.model.customer_phone,
+      customer_address: this.model.customer_address,
+      total_amount: this.model.total_amount,
+      payment_type: this.model.payment_type,
+      order_status: this.model.order_status,
+    });
+    let fileForm1 = FieldForm.createSelect('Trạng thái đơn', 'order_status', 'Trạng thái đơn', this.loadAllType(this.model.order_status));
+    this.fields.push(fileForm1);
 
+    let param = {
+      order_id: this.model.id,
+    };
+    this.service.loadByParams(param).subscribe((res: OrderMeta[]) => {
+        this.list = res;
+      }, () => {
+        this.list = [];
+      }
+    );
+  }
   initFieldForm(): FieldForm[] {
     return [
       FieldForm.createTextInput('Mã giảm giá *', 'code', 'Mã Đơn '),
       FieldForm.createTextInput('Ten KH', 'customer_name', 'Ten KH'),
       FieldForm.createTextInput('SĐT', 'customer_phone', 'SĐT'),
       FieldForm.createTextInput('Địa chỉ', 'customer_address', 'Địa chỉ'),
-      FieldForm.createTextInput('Địa chỉ', 'total_amount', 'Tổng tiền'),
+      FieldForm.createTextInput('Tổng tiền', 'total_amount', 'Tổng tiền'),
       FieldForm.createTextInput('Phương thức TT', 'payment_type', 'Phương thức TT'),
-      FieldForm.createSelect('Trạng thái đơn', 'order_status', 'Trạng thái đơn',this.loadAllType()),
+      // FieldForm.createSelect('Trạng thái đơn', 'order_status', 'Trạng thái đơn',this.loadAllType()),
     ];
   }
-  loaded(): void {
-    let param = {
-      order_id: this.model.id,
-    };
-    this.service.loadByParams(param).subscribe((res: OrderMeta[]) => {
-        this.list = res;
-      console.log(res);
-      }, () => {
-        this.list = [];
-      }
-    );
-  }
+
   editOrder() {
     let item: OrderMeta = this.prepareParams();
     console.log(this.prepareParams());

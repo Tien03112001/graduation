@@ -15,9 +15,12 @@ export class PromotionProductService extends AbstractCRUDService<PromotionProduc
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
     super(http, title, toaster, 'chương trình khuyến mại', 'promotions');
   }
-  assignProducts(id: number, ids: number): Observable<ProductMeta> {
+  assignProducts(id: number, ids: any): Observable<ProductMeta> {
     return this.toPipe(this.http.post<DataResponse<PromotionProductMeta>>(`${this.urlRestAPI}/${id}/attach_products?product_ids=${ids}`, {id: ids}));
   }
+  // assignManyProducts(id: number, ids: any): Observable<ProductMeta> {
+  //   return this.toPipe(this.http.post<DataResponse<PromotionProductMeta>>(`${this.urlRestAPI}/${id}/attach_products?product_ids=${ids}`, {id: ids}));
+  // }
   detachProduct(promotion_id:number,body: any,) {
     return this.toPipe(this.http.post<DataResponse<any>>(`${this.urlRestAPI}/${promotion_id}/detach_products`, body));
   }

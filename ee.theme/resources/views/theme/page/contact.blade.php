@@ -55,7 +55,7 @@
                         @if ($item['name']=="ĐỊA CHỈ")
                             <div class="contact-icon col-lg-4 col-md-4">
                                 <div class="single-icon-box">
-                                    <div class="icon-box-icon"> {!!$item['icon']!!}</div>
+                                    {{-- <div class="icon-box-icon"> {!!$item['icon']!!}</div> --}}
                                     <div class="icon-box-content">
                                         <h3 class="title">{{$item['name']}}</h3>
                                         <p class="content" style="max-width: 204px;">{!! $item['content']!!}</p>
@@ -66,7 +66,7 @@
                         @if ($item['name']!="ĐỊA CHỈ")
                             <div class="contact-icon col-lg-4 col-md-4">
                                 <div class="single-icon-box">
-                                    <div class="icon-box-icon"> {!!$item['icon']!!}</div>
+                                    {{-- <div class="icon-box-icon"> {!!$item['icon']!!}</div> --}}
                                     <div class="icon-box-content">
                                         <h3 class="title">{{$item['name']}}</h3>
                                         <p class="content">{!! $item['content']!!}</p>
@@ -80,9 +80,9 @@
         </div>
         <section class="map-block">
             <div class="container">
-                <div class="contact-map">
+                {{-- <div class="contact-map">
                     {!! $companyInformation['Vị trí'] !!}
-                </div>
+                </div> --}}
             </div>
         </section>
 

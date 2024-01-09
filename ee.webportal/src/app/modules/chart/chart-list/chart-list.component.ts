@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AbstractCRUDComponent} from '../../../core/crud';
 import {BsModalService, ModalOptions} from 'ngx-bootstrap';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
 import {TitleService} from '../../../core/services';
 import {ChartMeta} from '../chart.meta';
 import {ChartService} from '../chart.service';
@@ -20,34 +20,26 @@ import {Chart} from 'chart.js';
 export class ChartListComponent extends AbstractCRUDComponent<ChartMeta> {
 
   onInit(): void {
-    const ctx = document.getElementById('myChart');
-
-    new Chart("myChart", {
-      type: 'line',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Chart.js Line Chart'
-          }
-        }
-    }
-  })
-    ;
   }
+  buildSearchForm(): FormGroup {
+    return this.formBuilder.group({
+      date_start: new FormControl(null),
+      date_end: new FormControl(null),
+    });
+  }
+  // buildForm(): FormGroup {
+  //   return this.formBuilder.group({
+  //     start_date: new FormControl(null, Validators.required),
+  //     end_date: new FormControl(null, Validators.required),
 
+  //   });
+  // }
+  initFieldForm(): FieldForm[] {
+    return [
+      FieldForm.createDateTimeInput('Thời gian hết hạn', 'start_date', 'Nhập Ngày bắt đầu'),
+      FieldForm.createDateTimeInput('Thời gian hết hạn', 'end_date', 'Nhập Ngày kết thúc'),
+    ];
+  }
   onDestroy(): void {
   }
 
@@ -69,13 +61,6 @@ export class ChartListComponent extends AbstractCRUDComponent<ChartMeta> {
 
   getEditModalComponentOptions(): ModalOptions {
     return {'class': 'modal-huge'};
-  }
-
-  buildSearchForm(): FormGroup {
-    return this.formBuilder.group({
-      search: new FormControl(null),
-      published: new FormControl(''),
-    });
   }
 
   public initSearchForm(): FieldForm[] {
@@ -124,6 +109,56 @@ export class ChartListComponent extends AbstractCRUDComponent<ChartMeta> {
     super(service, modal, builder);
   }
 
+  createChart(){
+    const dataRevenue = [];
+    const labelsRevenue = [];
+    let param = {
+      date_start: this.searchForm.get('date_start').value,
+      date_end: this.searchForm.get('date_end').value,
+    };
+    this.service.loadByParams(param).subscribe((res) => {
+        this.list = res;
+        res.forEach(function(v) {
+          labelsRevenue.push(v['created_at']);
+          dataRevenue.push(v['total_amount']);
+
+        });
+        console.log(labelsRevenue);
+        const ctx = document.getElementById('myChart');
+        new Chart("myChart", {
+          type: 'line',
+          data: {
+            labels: labelsRevenue,
+            datasets: [{
+              label: 'doanh thu',
+              data: dataRevenue,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Chart.js Line Chart'
+              }
+            }
+        }
+      })
+        console.log(dataRevenue);
+        // let labelsRevenue.value = [];
+
+
+      }, () => {
+        this.list = [];
+      }
+    );
+
+    ;
+  }
 
   onPublishedChange(item: ChartMeta, index: number, enable: boolean) {
     let methodAsync = null;

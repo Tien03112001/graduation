@@ -56,7 +56,7 @@ class CartController extends RestController
                 ->where('category_id', $cart->getItems()[array_key_first($cart->getItems())]['item']['category_id'])
                 ->where('id', '<>', array_key_first($cart->getItems()))
                 ->orderBy('id', 'DESC')
-                ->with('article', 'tags', 'meta', 'category')
+                ->with('article', 'tags', 'meta', 'category','promotions')
                 ->limit(8)
                 ->get();
         } else {
@@ -73,7 +73,7 @@ class CartController extends RestController
         if (!$request->has('size-radio')) {
             return Redirect::back()->with('msg_error', 'Thêm vào giỏ hàng thất bại , vui lòng chọn size');
         } else {
-            $product = $this->productRepository->findById($id);
+            $product = $this->productRepository->findById($id,['promotions']);
             if (isset($product)) {
                 $quantity = $request->input('quantity', 1);
                 CartUtil::getInstance()->addItem($product, $quantity, $request->input('size-radio'),$product->sale_price);

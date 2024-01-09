@@ -179,4 +179,22 @@ class OrderController  extends RestController
     //         return $this->error($e->getMessage());
     //     }
     // }
+    public function export_chart(Request $request)
+    {
+        // $limit = $request->input('limit', null);
+        $clauses = [];
+        $orderBy = $request->input('orderBy', 'updated_at:desc');
+        $with = ['order_details', 'province', 'district', 'ward'];
+        $withCount = [];
+        if ($request->has('date_start')) {
+            array_push($clauses, WhereClause::query('created_at', $request->date_start, '>='));
+        }
+
+        if ($request->has('date_end')) {
+            array_push($clauses, WhereClause::query('created_at', $request->date_end, '<='));
+        }
+            $data = $this->repository->get($clauses, $orderBy, $with, $withCount);
+
+        return $this->success($data);
+    }
 }

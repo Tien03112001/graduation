@@ -310,11 +310,11 @@ class PromotionController extends RestController
                             $attributes['sale_price']=$product->price-($product->price* $model->discount_percent)/100;
                             $this->productRepository->update($product->id,$attributes);
                         }
-                        if($model->type==2)
-                        {
-                            $attributes['sale_price']=$model->same_price;
-                            $this->productRepository->update($product->id,$attributes);
-                        }
+                        // if($model->type==2)
+                        // {
+                        //     $attributes['sale_price']=$model->same_price;
+                        //     $this->productRepository->update($product->id,$attributes);
+                        // }
 
                         $this->repository->attachProduct($model, $productId);
 

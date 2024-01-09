@@ -1,6 +1,50 @@
-<h1>Angular Line Chart Example - ItSolutionStuff.com</h1>
-
+<h1>PHÂN TÍCH BÁN HÀNG VÀ DOANH THU</h1>
+<div class="panel-heading">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- <form [formGroup]="searchForm" (ngSubmit)="load()">
+        <div class="form-group col-xs-6">
+          <label for="date_start">NGÀY BẮT ĐẦU </label>
+          <input type="datetime-local"   name="date_start"  formControlName="search"
+                 placeholder="Tìm kiếm theo tên">
+          <label for="date_end">NGÀY KẾT THÚC</label>
+          <input type="datetime-local"  name="date_end"  formControlName="search"
+                 placeholder="Tìm kiếm theo tên">
+        </div>
+        <div class="col-xs-12">
+          <button class="btn btn-default" type="submit">
+            Tìm kiếm
+          </button>
+        </div>
+      </form> -->
+      <form [formGroup]="searchForm" (ngSubmit)="load()">
+        <div class="form-group col-xs-6">
+          <label for="date_start">Ngày bắt đầu</label>
+          <input type="date" class="form-control" formControlName="date_start" id="date_start" name="date_start"
+                 placeholder="Nhập chuỗi kí tự">
+        </div>
+        <div class="form-group col-xs-6">
+          <label for="date_end">Ngày kết thúc</label>
+          <input type="date" class="form-control" formControlName="date_end" id="date_end" name="date_end"
+                 placeholder="Nhập chuỗi kí tự">
+        </div>
+        <!-- <div class="form-group col-xs-6">
+          <label for="published">Tìm kiếm theo danh mục</label>
+          <input type="date" name="published" id="published" formControlName="published" >
+        </div> -->
+        <div class="col-xs-12">
+          <a class="btn btn-default" (click)="createChart()" >
+            Xuất biểu đồ
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div id="divChart" style="display: block;">
   <canvas id="myChart"
     ></canvas>
 </div>
+
+
+

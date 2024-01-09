@@ -99,13 +99,13 @@ class PostController extends RestController
         }
 
         $createdImages = [];
-        if ($request->hasFile('image')) {
-            $url = FileStorageUtil::getInstance()->putFile('images', $request->file('image'));
-            if (!($url)) {
-                return $this->error('Not Found File');
-            }
-            $attributes['image'] = $url;
-            array_push($createdImages, $url);
+        if ($request->hasfile('image')) {
+            $file = $request->file('image');
+            $extenstion = $file->getClientOriginalExtension();
+            $filename = 'http://localhost:8000/storage/'.time() . '.' . $extenstion;
+
+            $file->move('storage', $filename);
+            $attributes['image'] = $filename;
         }
         $content = HtmlUtil::minify($request->input('content'), $createdImages);
         $article = [
@@ -168,14 +168,13 @@ class PostController extends RestController
             $model->published = $request->input('published', $model->published);
         }
 
-        if ($request->hasFile('image')) {
-            $url = FileStorageUtil::getInstance()->putFile('images', $request->file('image'));
-            if (!($url)) {
-                return $this->error('Not Found File');
-            }
-            $model->image = $url;
-            $model->alt = $request->input('alt', $model->name);
-            array_push($createdImages, $url);
+        if ($request->hasfile('image')) {
+            $file = $request->file('image');
+            $extenstion = $file->getClientOriginalExtension();
+            $filename = 'http://localhost:8000/storage/'.time() . '.' . $extenstion;
+
+            $file->move('storage', $filename);
+            $model->image= $filename;
         }
 
         $article = (new Article())->where('articleable_type', 'posts')->where('articleable_id', $id)->first();

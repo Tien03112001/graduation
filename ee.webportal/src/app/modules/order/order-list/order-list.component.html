@@ -110,7 +110,7 @@
       </td>
 
       <td>
-        <p>{{item.created_at}}</p>
+        <p>{{item.created_at |  date:'MM/dd/yyyy hh:mm:ss'}}</p>
       </td>
       <td>
         <button type="button" class="btn btn-default btn-sm" title="Chỉnh sửa" (click)="edit(item,i)">

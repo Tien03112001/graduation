@@ -34,6 +34,9 @@ Route::group(['middleware' => ['auth.owned_website']], function () {
         Route::get('', 'OrderController@index');
         Route::post('{id}', 'OrderController@update');
     });
+    Route::group(['prefix' => 'charts'], function () {
+        Route::get('', 'OrderController@export_chart');
+    });
     Route::resource('users', 'UserController');
 
     Route::resource('articles', 'ArticleController');

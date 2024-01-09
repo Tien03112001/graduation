@@ -123,9 +123,9 @@ class ProductVariantController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if ($model->inventory_products->quantity > 0) {
-            return $this->errorClient('Không thể xóa do còn hàng');
-        }
+        // if ($model->inventory_products->quantity > 0) {
+        //     return $this->errorClient('Không thể xóa do còn hàng');
+        // }
         try {
             DB::beginTransaction();
             $this->repository->delete($model, ['inventory_products']);
